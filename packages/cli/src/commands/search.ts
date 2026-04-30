@@ -86,7 +86,6 @@ export function registerSearch(program: Command): void {
 
       output(data, fmt, (d) => {
         const results = d.results ?? [];
-        const recommendations = d.recommendations ?? [];
 
         // Results 表
         if (results.length === 0) {
@@ -96,16 +95,6 @@ export function registerSearch(program: Command): void {
           printTable({
             headers: ["类型", "name/title", "url", "summary"],
             rows: results.map(renderResultItem),
-            columnWidths: [10, 26, 42, 42],
-          });
-        }
-
-        // Recommendations 表（仅在有数据时显示）
-        if (recommendations.length > 0) {
-          process.stdout.write(`\nRecommendations (${recommendations.length} items)\n`);
-          printTable({
-            headers: ["类型", "name", "url", "description"],
-            rows: recommendations.map(renderSourceRow),
             columnWidths: [10, 26, 42, 42],
           });
         }

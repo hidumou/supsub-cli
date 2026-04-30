@@ -166,7 +166,7 @@ describe.skipIf(SKIP)("e2e/prod-cli - 通过子进程驱动 CLI 打正式环境"
 
   // ─── 搜索 ────────────────────────────────────────────────────
 
-  test("search <kw> --output json → 返回 results 与 recommendations 结构", async () => {
+  test("search <kw> --output json → 返回 results", async () => {
     const r = await runCli(["--output", "json", "search", "openai"], {
       tmpHome,
       withAuth: true,
@@ -175,7 +175,6 @@ describe.skipIf(SKIP)("e2e/prod-cli - 通过子进程驱动 CLI 打正式环境"
     const body = JSON.parse(r.stdout);
     expect(body.success).toBe(true);
     expect(Array.isArray(body.data.results)).toBe(true);
-    expect(Array.isArray(body.data.recommendations)).toBe(true);
   });
 
   test("search 非法 --type → exit 64 INVALID_ARGS", async () => {

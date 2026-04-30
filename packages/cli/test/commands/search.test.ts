@@ -56,15 +56,6 @@ describe("commands/search - 参数校验", () => {
       "utf-8",
     );
 
-    let receivedUrl = "";
-    globalThis.fetch = async (input: RequestInfo | URL): Promise<Response> => {
-      receivedUrl = typeof input === "string" ? input : input instanceof URL ? input.href : (input as Request).url;
-      return new Response(
-        JSON.stringify({ results: [], recommendations: [] }),
-        { status: 200, headers: { "Content-Type": "application/json" } },
-      );
-    };
-
     // 屏蔽 stdout 噪声
     const originalStdout = process.stdout.write.bind(process.stdout);
     process.stdout.write = (() => true) as typeof process.stdout.write;
