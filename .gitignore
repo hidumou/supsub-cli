@@ -8,3 +8,4 @@ coverage/
 .bun/
 .turbo/
 api.json
+.claude/
