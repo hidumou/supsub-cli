@@ -16,12 +16,23 @@ function shortUrl(url: string): string {
   }
 }
 
+function sourceKindLabel(sourceType: string): string {
+  const t = sourceType.toUpperCase();
+  if (t === "MP") return "公众号";
+  if (t === "WEBSITE") return "网站";
+  return sourceType;
+}
+
+function resultKindLabel(item: SearchResultItem): string {
+  if (item.type === "CONTENT") return "文章";
+  return sourceKindLabel((item.data as SourceBasic).sourceType);
+}
+
 function renderResultItem(item: SearchResultItem): string[] {
   if (item.type === "SOURCE") {
     const d = item.data as SourceBasic;
     return [
-      "SOURCE",
-      d.sourceType,
+      resultKindLabel(item),
       truncate(d.name, 24),
       shortUrl(d.url),
       truncate(d.description, 40),
@@ -29,8 +40,7 @@ function renderResultItem(item: SearchResultItem): string[] {
   } else {
     const d = item.data;
     return [
-      "CONTENT",
-      d.sourceType,
+      resultKindLabel(item),
       truncate(d.title, 24),
       shortUrl(d.url),
       truncate(d.summary, 40),
@@ -40,7 +50,7 @@ function renderResultItem(item: SearchResultItem): string[] {
 
 function renderSourceRow(s: SourceBasic): string[] {
   return [
-    s.sourceType,
+    sourceKindLabel(s.sourceType),
     truncate(s.name, 24),
     shortUrl(s.url),
     truncate(s.description, 40),
@@ -84,9 +94,9 @@ export function registerSearch(program: Command): void {
         } else {
           process.stdout.write(`Results (${results.length} items, page ${page})\n`);
           printTable({
-            headers: ["type", "sourceType", "name/title", "url", "summary"],
+            headers: ["类型", "name/title", "url", "summary"],
             rows: results.map(renderResultItem),
-            columnWidths: [10, 10, 26, 42, 42],
+            columnWidths: [10, 26, 42, 42],
           });
         }
 
@@ -94,9 +104,9 @@ export function registerSearch(program: Command): void {
         if (recommendations.length > 0) {
           process.stdout.write(`\nRecommendations (${recommendations.length} items)\n`);
           printTable({
-            headers: ["sourceType", "name", "url", "description"],
+            headers: ["类型", "name", "url", "description"],
             rows: recommendations.map(renderSourceRow),
-            columnWidths: [12, 26, 42, 42],
+            columnWidths: [10, 26, 42, 42],
           });
         }
       });

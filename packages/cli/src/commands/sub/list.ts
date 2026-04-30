@@ -6,16 +6,23 @@ import { output } from "../../ui/output.ts";
 import { printTable, truncate } from "../../ui/table.ts";
 import { normalizeType } from "./_args.ts";
 
+function sourceKindLabel(sourceType: string): string {
+  const t = sourceType.toUpperCase();
+  if (t === "MP") return "公众号";
+  if (t === "WEBSITE") return "网站";
+  return sourceType;
+}
+
 function renderSubscriptionTable(data: Subscription[]): void {
   if (data.length === 0) {
     process.stdout.write("(empty)\n");
     return;
   }
   printTable({
-    headers: ["sourceId", "type", "name", "unread", "description"],
+    headers: ["sourceId", "类型", "name", "unread", "description"],
     rows: data.map((s) => [
       s.sourceId,
-      s.sourceType,
+      sourceKindLabel(s.sourceType),
       truncate(s.name, 24),
       s.unreadCount,
       truncate(s.description, 40),

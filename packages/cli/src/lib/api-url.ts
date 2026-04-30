@@ -1,7 +1,7 @@
 // packages/cli/src/lib/api-url.ts
 // API 基地址解析：env > 硬编码常量。对齐 getnote-cli 实现习惯。
 
-export const DEFAULT_API_URL = "https://supsub.com";
+export const DEFAULT_API_URL = "https://supsub.net";
 
 /**
  * 解析当前 API 基地址。

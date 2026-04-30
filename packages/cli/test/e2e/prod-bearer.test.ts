@@ -41,7 +41,7 @@ describe.skipIf(SKIP)("e2e/prod-bearer - 正式环境 bearer_token 鉴权", () =
 
     originalApiUrl = process.env["SUPSUB_API_URL"];
     originalEnvKey = process.env["SUPSUB_API_KEY"];
-    // 强制走正式环境（注意：DEFAULT_API_URL 是 supsub.com，但真实正式域名是 supsub.net）
+    // 强制走正式环境，覆盖本地可能存在的 SUPSUB_API_URL（如 dev mock server）
     process.env["SUPSUB_API_URL"] = "https://supsub.net";
     // 清掉环境里的 api_key，避免抢占优先级
     delete process.env["SUPSUB_API_KEY"];

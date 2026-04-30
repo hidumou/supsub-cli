@@ -10,10 +10,16 @@ import { dieWith } from "../../lib/errors.ts";
 const POLL_INTERVAL_MS = 2000;
 const POLL_MAX_MS = 30_000;
 
-function renderMpTable(mp: NonNullable<MpSearchTaskResult["mp"]>): void {
+type Mp = NonNullable<MpSearchTaskResult["mp"]>;
+
+function renderMpTable(mps: Mp[]): void {
   printTable({
     headers: ["mpId", "name", "description"],
-    rows: [[mp.mpId, truncate(mp.name, 24), truncate(mp.description, 50)]],
+    rows: mps.map((mp) => [
+      mp.mpId,
+      truncate(mp.name, 24),
+      truncate(mp.description, 50),
+    ]),
     columnWidths: [20, 26, 52],
   });
 }
@@ -25,11 +31,8 @@ async function runSyncSearch(
   const { searchId } = await createSearchTask({ name });
 
   const start = Date.now();
-  type Mp = NonNullable<MpSearchTaskResult["mp"]>;
   const candidates: Mp[] = [];
   const seen = new Set<string>();
-  const normalize = (s: string) => s.replace(/\s+/g, "").toLowerCase();
-  const target = normalize(name);
   let lastMessage = "";
 
   while (Date.now() - start < POLL_MAX_MS) {
@@ -43,21 +46,13 @@ async function runSyncSearch(
     if (r.mp && !seen.has(r.mp.mpId)) {
       seen.add(r.mp.mpId);
       candidates.push(r.mp);
-
-      // 命中精确匹配可直接结束（忽略大小写与空白）
-      if (normalize(r.mp.name) === target) {
-        output(r.mp, fmt, renderMpTable);
-        return;
-      }
     }
 
     if (!r.finished) continue;
 
-    // finished：候选流已结束，选最佳匹配（精确优先，否则取第一个，按相关性排序）
-    const exact = candidates.find((c) => normalize(c.name) === target);
-    const best = exact ?? candidates[0];
-    if (best) {
-      output(best, fmt, renderMpTable);
+    // finished：候选流已结束，返回全部命中结果
+    if (candidates.length > 0) {
+      output(candidates, fmt, renderMpTable);
       return;
     }
 
