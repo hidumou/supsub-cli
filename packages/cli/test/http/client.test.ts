@@ -59,7 +59,7 @@ describe("http/client - 401 触发 clearAuth 并抛出 UNAUTHORIZED", () => {
   });
 
   test("2.4.a fetch 返回 401 时 config 中 api_key 被清空（clearAuth 效果）", async () => {
-    const { request } = await import("../src/http/client.ts");
+    const { request } = await import("../../src/http/client.ts");
 
     // 验证前配置文件含 api_key
     const beforeContent = await fs.readFile(CONFIG_FILE, "utf-8");
@@ -84,7 +84,7 @@ describe("http/client - 401 触发 clearAuth 并抛出 UNAUTHORIZED", () => {
   });
 
   test("2.4.b fetch 返回 401 时抛出 code=UNAUTHORIZED 的 ErrorEnvelope", async () => {
-    const { request } = await import("../src/http/client.ts");
+    const { request } = await import("../../src/http/client.ts");
 
     let caughtError: unknown;
     try {

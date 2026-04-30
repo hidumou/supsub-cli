@@ -4,7 +4,7 @@
 // 该规则被抽离为纯函数 pickInitialIntervalMs，避免在测试中
 // 注入 sleepFn。
 import { describe, test, expect } from "bun:test";
-import { pickInitialIntervalMs } from "../src/commands/auth/device-flow.ts";
+import { pickInitialIntervalMs } from "../../../src/commands/auth/device-flow.ts";
 
 describe("device-flow - pickInitialIntervalMs", () => {
   test("interval=0 触发 5000ms fallback", () => {

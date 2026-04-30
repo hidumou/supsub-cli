@@ -55,7 +55,7 @@ describe("device-flow - access_denied 立即停止并抛出", () => {
   });
 
   test("5.8.a access_denied 触发 code=ACCESS_DENIED 的 reject", async () => {
-    const { runDeviceFlow } = await import("../src/commands/auth/device-flow.ts");
+    const { runDeviceFlow } = await import("../../../src/commands/auth/device-flow.ts");
 
     let caughtError: unknown;
     try {
@@ -69,7 +69,7 @@ describe("device-flow - access_denied 立即停止并抛出", () => {
   });
 
   test("5.8.b access_denied 时 error.message 含「用户拒绝授权」", async () => {
-    const { runDeviceFlow } = await import("../src/commands/auth/device-flow.ts");
+    const { runDeviceFlow } = await import("../../../src/commands/auth/device-flow.ts");
 
     let caughtError: unknown;
     try {
@@ -82,7 +82,7 @@ describe("device-flow - access_denied 立即停止并抛出", () => {
   });
 
   test("5.8.c access_denied 后不再发起第 3 次 token 请求", async () => {
-    const { runDeviceFlow } = await import("../src/commands/auth/device-flow.ts");
+    const { runDeviceFlow } = await import("../../../src/commands/auth/device-flow.ts");
 
     try {
       await runDeviceFlow();
