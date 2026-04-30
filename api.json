@@ -1,0 +1,5626 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "SupSub-API",
+    "version": ""
+  },
+  "components": {
+    "responses": {
+      "ErrorResponse-62": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "code": {
+                  "description": "错误编码，如：NotFound",
+                  "type": "string",
+                  "x-apicat-mock": "httpcode"
+                },
+                "data": {
+                  "description": "默认不响应此参数，特殊情况需要携带的数据",
+                  "type": "object",
+                  "x-apicat-mock": "object"
+                },
+                "message": {
+                  "description": "错误描述",
+                  "type": "string",
+                  "x-apicat-mock": "string"
+                },
+                "status": {
+                  "description": "和 http code 相同",
+                  "type": "integer",
+                  "x-apicat-mock": "integer"
+                }
+              },
+              "type": "object",
+              "required": [
+                "code",
+                "message",
+                "status"
+              ],
+              "x-apicat-orders": [
+                "code",
+                "message",
+                "status",
+                "data"
+              ],
+              "x-apicat-mock": "object"
+            }
+          }
+        },
+        "description": "",
+        "x-apicat-response-name": "ErrorResponse"
+      }
+    },
+    "schemas": {
+      "信息源基本信息-1405": {
+        "properties": {
+          "description": {
+            "description": "信息源描述",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "img": {
+            "description": "信息源图标",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "introduction": {
+            "description": "信息源的AI介绍",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "isSubscribed": {
+            "description": "用户是否已订阅",
+            "type": "boolean",
+            "x-apicat-mock": "boolean"
+          },
+          "name": {
+            "description": "信息源名称",
+            "type": "string",
+            "x-apicat-mock": "name"
+          },
+          "sourceId": {
+            "description": "信息源 ID",
+            "type": "integer",
+            "x-apicat-mock": "integer"
+          },
+          "sourceType": {
+            "description": "信息源类型: MP 公众号, WEBSITE 网站",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "url": {
+            "description": "信息源链接",
+            "type": "string",
+            "x-apicat-mock": "url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sourceType",
+          "sourceId",
+          "isSubscribed",
+          "img",
+          "name",
+          "description",
+          "introduction",
+          "url"
+        ],
+        "x-apicat-orders": [
+          "sourceType",
+          "sourceId",
+          "isSubscribed",
+          "img",
+          "name",
+          "description",
+          "introduction",
+          "url"
+        ],
+        "x-apicat-mock": "object"
+      },
+      "内容基本信息-1406": {
+        "properties": {
+          "contentId": {
+            "description": "内容ID",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "coverImage": {
+            "description": "封面图",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "isSubscribed": {
+            "description": "用户是否已订阅",
+            "type": "boolean",
+            "x-apicat-mock": "boolean"
+          },
+          "keywords": {
+            "description": "关键词",
+            "items": {
+              "type": "string",
+              "x-apicat-mock": "string"
+            },
+            "type": "array",
+            "x-apicat-mock": "array"
+          },
+          "publishedAt": {
+            "description": "发布时间时间戳",
+            "type": "integer",
+            "x-apicat-mock": "integer"
+          },
+          "sourceId": {
+            "description": "信息源ID",
+            "type": "integer",
+            "x-apicat-mock": "integer"
+          },
+          "sourceName": {
+            "description": "信息源名称",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "sourceType": {
+            "description": "信息源类型: MP 公众号, WEBSITE 网站",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "summary": {
+            "description": "摘要",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "tags": {
+            "description": "标签",
+            "items": {
+              "type": "string",
+              "x-apicat-mock": "string"
+            },
+            "type": "array",
+            "x-apicat-mock": "array"
+          },
+          "title": {
+            "description": "标题",
+            "type": "string",
+            "x-apicat-mock": "title"
+          },
+          "url": {
+            "description": "链接",
+            "type": "string",
+            "x-apicat-mock": "url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "contentId",
+          "url",
+          "title",
+          "coverImage",
+          "tags",
+          "keywords",
+          "summary",
+          "publishedAt",
+          "sourceType",
+          "sourceId",
+          "sourceName",
+          "isSubscribed"
+        ],
+        "x-apicat-orders": [
+          "contentId",
+          "url",
+          "title",
+          "coverImage",
+          "tags",
+          "keywords",
+          "summary",
+          "publishedAt",
+          "sourceType",
+          "sourceId",
+          "sourceName",
+          "isSubscribed"
+        ],
+        "x-apicat-mock": "object"
+      },
+      "微信文章(字段最全)-1383": {
+        "properties": {
+          "articleId": {
+            "description": "文章 ID(微信官方)",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "articleIdx": {
+            "description": "群发图文中的第几篇(微信官方)",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "articleMsgId": {
+            "description": "文章所在的群发消息 ID(微信官方)",
+            "type": "integer",
+            "x-apicat-mock": "integer"
+          },
+          "articleSn": {
+            "description": "文章签名(微信官方)",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "category": {
+            "description": "分类",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "coverImage": {
+            "description": "文章封面图",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "createdAt": {
+            "description": "创建时间",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "description": {
+            "description": "描述",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "id": {
+            "type": "integer",
+            "x-apicat-mock": "integer"
+          },
+          "keywords": {
+            "description": "关键词",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "llmSummary": {
+            "description": "大模型生成的文章摘要",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "llmTitle": {
+            "description": "大模型生成的文章标题",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "mpId": {
+            "description": "公众号 ID(微信官方)",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "publishedAt": {
+            "description": "发布时间(年-月-日 时:分:秒)",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "tags": {
+            "description": "标签",
+            "type": "string",
+            "x-apicat-mock": "string"
+          },
+          "title": {
+            "description": "标题",
+            "type": "string",
+            "x-apicat-mock": "title"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "mpId",
+          "articleId",
+          "articleMsgId",
+          "articleIdx",
+          "articleSn",
+          "title",
+          "coverImage",
+          "description",
+          "category",
+          "tags",
+          "keywords",
+          "publishedAt",
+          "llmTitle",
+          "llmSummary",
+          "createdAt"
+        ],
+        "x-apicat-orders": [
+          "id",
+          "mpId",
+          "articleId",
+          "articleMsgId",
+          "articleIdx",
+          "articleSn",
+          "title",
+          "coverImage",
+          "description",
+          "category",
+          "tags",
+          "keywords",
+          "publishedAt",
+          "llmTitle",
+          "llmSummary",
+          "createdAt"
+        ],
+        "x-apicat-mock": "object"
+      }
+    },
+    "x-apicat-global-parameters": {
+      "header-Authorization": {
+        "name": "Authorization",
+        "in": "header",
+        "required": true,
+        "description": "Bearer token",
+        "schema": {
+          "description": "Bearer token",
+          "type": "string",
+          "x-apicat-mock": "string"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/email/verify": {
+      "post": {
+        "summary": "验证邮箱",
+        "operationId": "1482",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "token"
+                ],
+                "x-apicat-orders": [
+                  "token"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "accessToken": {
+                      "description": "访问令牌",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "refreshToken": {
+                      "description": "刷新令牌",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "accessToken",
+                    "refreshToken"
+                  ],
+                  "x-apicat-orders": [
+                    "accessToken",
+                    "refreshToken"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse-62"
+          }
+        }
+      }
+    },
+    "/api/auth/forgot-password": {
+      "post": {
+        "summary": "发送重置密码邮件",
+        "operationId": "1489",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "x-apicat-mock": "email"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "x-apicat-orders": [
+                  "email"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n    \"message\": \"重置密码邮件已发送，请检查您的邮箱\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse-62"
+          }
+        }
+      }
+    },
+    "/api/auth/google": {
+      "post": {
+        "summary": "Google 登录",
+        "operationId": "1484",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "x-apicat-mock": "httpcode"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "code"
+                ],
+                "x-apicat-orders": [
+                  "code"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "accessToken": {
+                      "description": "访问令牌",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "refreshToken": {
+                      "description": "刷新令牌",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "accessToken",
+                    "refreshToken"
+                  ],
+                  "x-apicat-orders": [
+                    "accessToken",
+                    "refreshToken"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse-62"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "登录",
+        "operationId": "1481",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "x-apicat-mock": "email"
+                  },
+                  "password": {
+                    "description": "拿公钥对密码加密",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "x-apicat-orders": [
+                  "email",
+                  "password"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "accessToken": {
+                      "description": "访问令牌",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "refreshToken": {
+                      "description": "刷新令牌",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "accessToken",
+                    "refreshToken"
+                  ],
+                  "x-apicat-orders": [
+                    "accessToken",
+                    "refreshToken"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse-62"
+          }
+        }
+      }
+    },
+    "/api/auth/public-key": {
+      "get": {
+        "summary": "获取公钥",
+        "operationId": "1485",
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "publicKey": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "publicKey"
+                  ],
+                  "x-apicat-orders": [
+                    "publicKey"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n    \"publicKey\": \"-----BEGIN PUBLIC KEY-----\\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsRqO6he64w2gB9Rjuo69\\nl8cSzgkpkzLkJRrmeDO4m2EP/sG9DAto5kFgTrhoFjVzMvChc7cYjxCZD5RjxVCs\\nCX/x/d3tGiccG+7zu7VfQw1xA2/0vsx5XAbmFAroksezOwihwMCtrwMgWxB8+Dfz\\nGY+8r7tSuUS1FO2xM69rXTOy0Cqmcanc70uNdNSAB07gmnfX8hVhFJcRArHj/oV/\\n2HVlFHGwl4yb0OopxFyZArrIlM1jbh5w2/tArm6tTKaOEt07u8aOK9pYZAI0jEWi\\n88tdcTPYuS+maJCgtmGJCC1vO5cReACt73z5n5OBHfY78mq7Ltdx1QT1YdHQq9S/\\nswIDAQAB\\n-----END PUBLIC KEY-----\\n\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "summary": "注册",
+        "operationId": "1480",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "x-apicat-mock": "email"
+                  },
+                  "password": {
+                    "description": "拿公钥对密码加密",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "x-apicat-orders": [
+                  "email",
+                  "password"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n    \"message\": \"注册成功，请前往邮箱验证\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse-62"
+          }
+        }
+      }
+    },
+    "/api/auth/reset-password": {
+      "post": {
+        "summary": "重置密码",
+        "operationId": "1490",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "password": {
+                    "description": "公钥加密",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "token": {
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "token",
+                  "password"
+                ],
+                "x-apicat-orders": [
+                  "token",
+                  "password"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n    \"message\": \"密码已成功重置\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse-62"
+          }
+        }
+      }
+    },
+    "/api/auth/tokens": {
+      "post": {
+        "summary": "刷新accessToken",
+        "operationId": "1483",
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "refreshToken": {
+                    "description": "刷新令牌",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "refreshToken"
+                ],
+                "x-apicat-orders": [
+                  "refreshToken"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "accessToken": {
+                      "description": "访问令牌",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "accessToken"
+                  ],
+                  "x-apicat-orders": [
+                    "accessToken"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse-62"
+          }
+        }
+      }
+    },
+    "/api/focus-sessions": {
+      "post": {
+        "summary": "创建会话",
+        "operationId": "1691",
+        "tags": [
+          "会话相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "focusId": {
+                    "description": "关注点ID，传此参数表示对现有关注点创建调整会话",
+                    "type": "integer",
+                    "x-apicat-mock": "integer"
+                  }
+                },
+                "type": "object",
+                "x-apicat-orders": [
+                  "focusId"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "sessionId": {
+                      "description": "会话ID",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "sessionId"
+                  ],
+                  "x-apicat-orders": [
+                    "sessionId"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/focus-sessions/{sessionId}/draft": {
+      "get": {
+        "summary": "获取最新的关注点草稿",
+        "operationId": "1694",
+        "tags": [
+          "会话相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "draft": {
+                      "description": "草稿的 markdown 内容(hasUpdate为true时返回)",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "hasUpdate": {
+                      "description": "是否有更新",
+                      "type": "boolean",
+                      "x-apicat-mock": "boolean"
+                    },
+                    "readyToSave": {
+                      "description": "草稿是否已具备保存条件",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "hasUpdate",
+                    "readyToSave"
+                  ],
+                  "x-apicat-orders": [
+                    "hasUpdate",
+                    "readyToSave",
+                    "draft"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      },
+      "put": {
+        "summary": "更新草稿内容",
+        "operationId": "1697",
+        "tags": [
+          "会话相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "会话ID",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "draft": {
+                    "description": "草稿内容",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "draft"
+                ],
+                "x-apicat-orders": [
+                  "draft"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "content": {
+              "none": {}
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/focus-sessions/{sessionId}/messages": {
+      "get": {
+        "summary": "获取聊天记录",
+        "operationId": "1696",
+        "tags": [
+          "会话相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "页码",
+              "default": "1",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "每页记录数",
+              "default": "20",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "会话ID",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "clientMessageId": {
+                        "description": "消息ID",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "content": {
+                        "description": "内容",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "createdAt": {
+                        "description": "创建时间戳",
+                        "type": "integer",
+                        "x-apicat-mock": "integer"
+                      },
+                      "role": {
+                        "description": "角色: ASSISTANT, USER",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      }
+                    },
+                    "type": "object",
+                    "required": [
+                      "role",
+                      "content",
+                      "clientMessageId",
+                      "createdAt"
+                    ],
+                    "x-apicat-orders": [
+                      "role",
+                      "content",
+                      "clientMessageId",
+                      "createdAt"
+                    ],
+                    "x-apicat-mock": "object"
+                  },
+                  "type": "array",
+                  "x-apicat-mock": "array"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "[\n    {\n        \"role\": \"ASSISTANT\",\n        \"content\": \"好的，已确认你的最新关注方向。  \\n如果你觉得调整得差不多了，记得在页面上点击保存，这样后续推送的内容会根据你最新的关注方向来更新。\",\n        \"clientMessageId\": null,\n        \"createdAt\": 1773296635\n    },\n    {\n        \"role\": \"USER\",\n        \"content\": \"对，没问题\",\n        \"clientMessageId\": \"008\",\n        \"createdAt\": 1773296634\n    },\n    {\n        \"role\": \"ASSISTANT\",\n        \"content\": \"明白了，新增的 AI 结合方向是：  \\n- 按主题/关键词过滤 RSS 内容  \\n- 提取摘要或关键结论  \\n\\n这两点会和原有的三个方向并列，作为你当前关注的重点之一。\\n\\n总结一下，你现在最关注的四个方向是：  \\n1. RSS 阅读工具的实操使用（如 Feedly、Inoreader）  \\n2. 高质量 RSS 源的筛选与验证  \\n3. RSS 与个人工作流的轻量整合（如 Notion、邮件、归档等）  \\n4. RSS 数据与 AI 的实用结合（主题/关键词过滤 + 摘要/关键结论提取）  \\n\\n其他内容（如搭建、理论、无实测推荐）仍排除。\\n\\n这样对吗？\",\n        \"clientMessageId\": null,\n        \"createdAt\": 1773296595\n    },\n    {\n        \"role\": \"USER\",\n        \"content\": \"1和2吧\",\n        \"clientMessageId\": \"007\",\n        \"createdAt\": 1773296591\n    },\n    {\n        \"role\": \"ASSISTANT\",\n        \"content\": \"这个方向很具体——用 AI 对 RSS 内容做预读和初筛。\\n\\n想确认一下：你希望 AI 做哪类初筛？比如：  \\n- 按主题/关键词过滤（如只留“AI 工具评测”类）  \\n- 提取摘要或关键结论  \\n- 判断信息可信度或时效性  \\n- 还是其他方式？\\n\\n这样我可以更准确理解你想加的这部分。\",\n        \"clientMessageId\": null,\n        \"createdAt\": 1773296545\n    },\n    {\n        \"role\": \"USER\",\n        \"content\": \"要不再加一点，RSS 数据如何跟 AI 结合让 AI 帮我预读做初筛\",\n        \"clientMessageId\": \"006\",\n        \"createdAt\": 1773296542\n    },\n    {\n        \"role\": \"ASSISTANT\",\n        \"content\": \"好的，已确认你的关注方向调整为：  \\n- 聚焦 RSS 阅读工具的实操使用（如 Feedly、Inoreader）  \\n- 高质量 RSS 源的筛选与验证方法  \\n- RSS 与个人工作流的轻量整合（如 Notion、邮件、归档等）  \\n- 排除搭建、理论、无实测依据的内容  \\n\\n如果你觉得调整得差不多了，记得在页面上点击保存，这样后续推送的内容会根据你最新的关注方向来更新。\",\n        \"clientMessageId\": null,\n        \"createdAt\": 1773287857\n    },\n    {\n        \"role\": \"USER\",\n        \"content\": \"匹配，可以\",\n        \"clientMessageId\": \"005\",\n        \"createdAt\": 1773287854\n    },\n    {\n        \"role\": \"ASSISTANT\",\n        \"content\": \"清楚了：你关注的三个核心是——  \\n1. RSS 阅读工具的实操使用（如 Feedly、Inoreader）  \\n2. 高质量 RSS 源的筛选与验证  \\n3. RSS 与个人工作流的轻量整合（如同步到 Notion、邮件摘要、归档等）  \\n\\n原来的「理论/协议细节」「自托管」「无实测依据的工具推荐」这些，都继续排除。  \\n\\n这样调整后，和你现在的需求匹配吗？\",\n        \"clientMessageId\": null,\n        \"createdAt\": 1773287766\n    },\n    {\n        \"role\": \"USER\",\n        \"content\": \"对，RSS 和工作流的结合也需要\",\n        \"clientMessageId\": \"004\",\n        \"createdAt\": 1773287763\n    }\n]"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/focus-sessions/{sessionId}/messages/stream": {
+      "post": {
+        "summary": "对话接口(SSE)",
+        "operationId": "1692",
+        "tags": [
+          "会话相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "会话ID",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "clientMessageId": {
+                    "description": "客户端消息ID，确保本次会话唯一",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "message": {
+                    "description": "消息内容",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "message",
+                  "clientMessageId"
+                ],
+                "x-apicat-orders": [
+                  "message",
+                  "clientMessageId"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "draftUpdated": {
+                      "description": "本次消息是否导致草稿内容更新",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "readyToSave": {
+                      "description": "草稿是否已具备保存条件",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "draftUpdated",
+                    "readyToSave"
+                  ],
+                  "x-apicat-orders": [
+                    "draftUpdated",
+                    "readyToSave"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Stream response demo",
+                    "value": "# token event\n{\"token\": \"message...\"}\n\n# meta event\n{\"draftUpdated\": true, \"readyToSave\": true}\n\n# done event\n{\"ok\":true}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success(meta)"
+          }
+        }
+      }
+    },
+    "/api/focus-sessions/{sessionId}/save": {
+      "post": {
+        "summary": "保存草稿成关注点",
+        "operationId": "1695",
+        "tags": [
+          "会话相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "sessionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "similarityThreshold": {
+                    "description": "相似度阈值(0.4~0.85)",
+                    "type": "number",
+                    "x-apicat-mock": "float"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "similarityThreshold"
+                ],
+                "x-apicat-orders": [
+                  "similarityThreshold"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "focusId": {
+                      "description": "关注点ID",
+                      "type": "number",
+                      "x-apicat-mock": "float"
+                    },
+                    "message": {
+                      "description": "创建成功提示语",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "focusId",
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "focusId",
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/focuses": {
+      "get": {
+        "summary": "关注点列表",
+        "operationId": "1528",
+        "tags": [
+          "关注点"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "icon": {
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "id": {
+                        "type": "integer",
+                        "x-apicat-mock": "integer"
+                      },
+                      "title": {
+                        "description": "关注点标题",
+                        "type": "string",
+                        "x-apicat-mock": "title"
+                      },
+                      "unreadCount": {
+                        "description": "未读文章数",
+                        "type": "integer",
+                        "x-apicat-mock": "integer"
+                      }
+                    },
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "icon",
+                      "title",
+                      "unreadCount"
+                    ],
+                    "x-apicat-orders": [
+                      "id",
+                      "icon",
+                      "title",
+                      "unreadCount"
+                    ],
+                    "x-apicat-mock": "object"
+                  },
+                  "type": "array",
+                  "x-apicat-mock": "array"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/focuses/templates": {
+      "get": {
+        "summary": "关注点模板(作废)",
+        "operationId": "1533",
+        "tags": [
+          "关注点"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "category": {
+                        "description": "分类名称",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "list": {
+                        "items": {
+                          "properties": {
+                            "focus": {
+                              "type": "string",
+                              "x-apicat-mock": "string"
+                            },
+                            "icon": {
+                              "type": "string",
+                              "x-apicat-mock": "string"
+                            },
+                            "id": {
+                              "type": "integer",
+                              "x-apicat-mock": "integer"
+                            }
+                          },
+                          "type": "object",
+                          "required": [
+                            "id",
+                            "icon",
+                            "focus"
+                          ],
+                          "x-apicat-orders": [
+                            "id",
+                            "icon",
+                            "focus"
+                          ],
+                          "x-apicat-mock": "object"
+                        },
+                        "type": "array",
+                        "x-apicat-mock": "array"
+                      }
+                    },
+                    "type": "object",
+                    "required": [
+                      "category",
+                      "list"
+                    ],
+                    "x-apicat-orders": [
+                      "category",
+                      "list"
+                    ],
+                    "x-apicat-mock": "object"
+                  },
+                  "type": "array",
+                  "x-apicat-mock": "array"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "[\n  {\n    \"category\": \"AI\",\n    \"list\": [\n      {\n        \"id\": 1,\n        \"icon\": \"💡\",\n        \"focus\": \"AIGC 在 B 端产品中的落地\",\n      }\n    ]\n  },\n  {\n    \"category\": \"SaaS\",\n    \"list\": [\n      {\n        \"id\": 2,\n        \"icon\": \"🚀\",\n        \"focus\": \"中国 SaaS 公司在海外增长、定价、本地化上的案例和文章\"\n      }\n    ]\n  },\n  {\n    \"category\": \"投资\",\n    \"list\": [\n      {\n        \"id\": 3,\n        \"icon\": \"📈\",\n        \"focus\": \"阿里、美团、京东等公司在港股市场的动向和研究分析\"\n      }\n    ]\n  }\n]"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/focuses/{focusId}": {
+      "get": {
+        "summary": "查询一个关注点详情",
+        "operationId": "1529",
+        "tags": [
+          "关注点"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "focusId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "关注点ID",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "createdAt": {
+                      "type": "integer",
+                      "x-apicat-mock": "integer"
+                    },
+                    "icon": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "rawContent": {
+                      "description": "关注点 markdown 内容",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "similarityThreshold": {
+                      "description": "相似度阈值(0.4~0.85)",
+                      "type": "number",
+                      "x-apicat-mock": "float"
+                    },
+                    "title": {
+                      "description": "关注点标题",
+                      "type": "string",
+                      "x-apicat-mock": "title"
+                    },
+                    "updatedAt": {
+                      "type": "integer",
+                      "x-apicat-mock": "integer"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "icon",
+                    "title",
+                    "rawContent",
+                    "similarityThreshold",
+                    "updatedAt",
+                    "createdAt"
+                  ],
+                  "x-apicat-orders": [
+                    "icon",
+                    "title",
+                    "rawContent",
+                    "similarityThreshold",
+                    "updatedAt",
+                    "createdAt"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/focuses/{id}": {
+      "delete": {
+        "summary": "删除关注点",
+        "operationId": "1531",
+        "tags": [
+          "关注点"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "description": "删除成功提示语",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      },
+      "put": {
+        "summary": "修改关注点",
+        "operationId": "1534",
+        "tags": [
+          "关注点"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "icon": {
+                    "description": "图标",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "rawContent": {
+                    "description": "原始 markdown 内容",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "similarityThreshold": {
+                    "description": "相似度阈值(0.4~0.85)",
+                    "type": "number",
+                    "x-apicat-mock": "float"
+                  },
+                  "title": {
+                    "description": "标题",
+                    "type": "string",
+                    "x-apicat-mock": "title"
+                  }
+                },
+                "type": "object",
+                "x-apicat-orders": [
+                  "icon",
+                  "title",
+                  "rawContent",
+                  "similarityThreshold"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/focuses/{id}/contents": {
+      "get": {
+        "summary": "关注点内容列表",
+        "operationId": "1532",
+        "tags": [
+          "关注点"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "unread未读列表 all全部列表",
+              "default": "unread",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "关注点 ID",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "articleId": {
+                        "description": "文章 ID",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "coverImage": {
+                        "description": "封面图",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "isRead": {
+                        "description": "是否已读",
+                        "type": "boolean",
+                        "x-apicat-mock": "boolean"
+                      },
+                      "keywords": {
+                        "items": {
+                          "description": "关键词，例如: [\"雷军\",\"马斯克\"]",
+                          "type": "string",
+                          "x-apicat-mock": "string"
+                        },
+                        "type": "array",
+                        "x-apicat-mock": "array"
+                      },
+                      "publishedAt": {
+                        "description": "发布时间，时间戳",
+                        "type": "integer",
+                        "x-apicat-mock": "integer"
+                      },
+                      "sourceName": {
+                        "description": "订阅源名称",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "sourceType": {
+                        "description": "订阅源类型: MP",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "summary": {
+                        "description": "摘要",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "tags": {
+                        "items": {
+                          "description": "话题标签，例如: [\"人工智能\",\"AI\"]",
+                          "type": "string",
+                          "x-apicat-mock": "string"
+                        },
+                        "type": "array",
+                        "x-apicat-mock": "array"
+                      },
+                      "title": {
+                        "description": "文章标题",
+                        "type": "string",
+                        "x-apicat-mock": "title"
+                      },
+                      "url": {
+                        "description": "文章链接",
+                        "type": "string",
+                        "x-apicat-mock": "url"
+                      }
+                    },
+                    "type": "object",
+                    "required": [
+                      "articleId",
+                      "sourceType",
+                      "sourceName",
+                      "url",
+                      "title",
+                      "coverImage",
+                      "tags",
+                      "keywords",
+                      "summary",
+                      "publishedAt",
+                      "isRead"
+                    ],
+                    "x-apicat-orders": [
+                      "articleId",
+                      "sourceType",
+                      "sourceName",
+                      "url",
+                      "title",
+                      "coverImage",
+                      "tags",
+                      "keywords",
+                      "summary",
+                      "publishedAt",
+                      "isRead"
+                    ],
+                    "x-apicat-mock": "object"
+                  },
+                  "type": "array",
+                  "x-apicat-mock": "array"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/focuses/{id}/feed": {
+      "get": {
+        "summary": "获取关注点 Feed 链接",
+        "operationId": "1550",
+        "tags": [
+          "关注点"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "atom": {
+                      "description": "Atom 格式链接",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "json": {
+                      "description": "JSON 格式链接",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "rss": {
+                      "description": "RSS2.0 格式链接",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "rss",
+                    "atom",
+                    "json"
+                  ],
+                  "x-apicat-orders": [
+                    "rss",
+                    "atom",
+                    "json"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/focuses/{id}/mark-as-read": {
+      "post": {
+        "summary": "标记已读",
+        "operationId": "1678",
+        "tags": [
+          "关注点"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "contentId": {
+                    "description": "内容 ID（传此参数表示只标记某一篇为已读）",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "sourceType": {
+                    "description": "信息源类型（传此参数表示只标记某一篇为已读）",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "x-apicat-orders": [
+                  "sourceType",
+                  "contentId"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "content": {
+              "none": {}
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/focuses/{id}/unread-count": {
+      "get": {
+        "summary": "获取关注点未读文章数",
+        "operationId": "1679",
+        "tags": [
+          "关注点"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "关注点 ID",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "unreadCount": {
+                      "description": "文章未读数量",
+                      "type": "integer",
+                      "x-apicat-mock": "integer"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "unreadCount"
+                  ],
+                  "x-apicat-orders": [
+                    "unreadCount"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Response Name"
+          }
+        }
+      }
+    },
+    "/api/groups": {
+      "get": {
+        "summary": "分组列表",
+        "operationId": "1602",
+        "tags": [
+          "订阅分组"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "x-apicat-mock": "integer"
+                      },
+                      "name": {
+                        "description": "分组名称",
+                        "type": "string",
+                        "x-apicat-mock": "name"
+                      }
+                    },
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "name"
+                    ],
+                    "x-apicat-orders": [
+                      "id",
+                      "name"
+                    ],
+                    "x-apicat-mock": "object"
+                  },
+                  "type": "array",
+                  "x-apicat-mock": "array"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      },
+      "post": {
+        "summary": "创建分组",
+        "operationId": "1598",
+        "tags": [
+          "订阅分组"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "description": "分组名称",
+                    "type": "string",
+                    "x-apicat-mock": "name"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "x-apicat-orders": [
+                  "name"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "description": "分组ID",
+                      "type": "string",
+                      "x-apicat-mock": "uuid"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "x-apicat-orders": [
+                    "id"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/groups/reorder": {
+      "post": {
+        "summary": "分组排序",
+        "operationId": "1600",
+        "tags": [
+          "订阅分组"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "ids": {
+                    "items": {
+                      "description": "分组ID",
+                      "type": "number",
+                      "x-apicat-mock": "float"
+                    },
+                    "type": "array",
+                    "x-apicat-mock": "array"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "ids"
+                ],
+                "x-apicat-orders": [
+                  "ids"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "content": {
+              "none": {}
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/groups/{id}": {
+      "delete": {
+        "summary": "删除分组",
+        "operationId": "1601",
+        "tags": [
+          "订阅分组"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "分组ID",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "content": {
+              "none": {}
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      },
+      "get": {
+        "summary": "获取分组名称",
+        "operationId": "1605",
+        "tags": [
+          "订阅分组"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "分组 ID",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "name": {
+                      "description": "分组名称",
+                      "type": "string",
+                      "x-apicat-mock": "name"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "name"
+                  ],
+                  "x-apicat-orders": [
+                    "name"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      },
+      "put": {
+        "summary": "编辑分组",
+        "operationId": "1599",
+        "tags": [
+          "订阅分组"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "分组ID",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "description": "分组名称",
+                    "type": "string",
+                    "x-apicat-mock": "name"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "x-apicat-orders": [
+                  "name"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "content": {
+              "none": {}
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/groups/{id}/feed": {
+      "get": {
+        "summary": "获取分组 Feed 链接",
+        "operationId": "1597",
+        "tags": [
+          "订阅分组"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "分组 ID",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "atom": {
+                      "description": "Atom 格式链接",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "json": {
+                      "description": "JSON 格式链接",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "rss": {
+                      "description": "RSS2.0 格式链接",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "rss",
+                    "atom",
+                    "json"
+                  ],
+                  "x-apicat-orders": [
+                    "rss",
+                    "atom",
+                    "json"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n    \"rss\": \"http://localhost:3000/feed/0260f97e-fdf5-4b4a-b885-5a7f54caa222/subscriptions/groups/1/rss\",\n    \"atom\": \"http://localhost:3000/feed/0260f97e-fdf5-4b4a-b885-5a7f54caa222/subscriptions/groups/1/atom\",\n    \"json\": \"http://localhost:3000/feed/0260f97e-fdf5-4b4a-b885-5a7f54caa222/subscriptions/groups/1/json\",\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/groups/{id}/subscriptions": {
+      "get": {
+        "summary": "分组订阅源列表",
+        "operationId": "1603",
+        "tags": [
+          "订阅分组"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "sourceType",
+            "in": "query",
+            "schema": {
+              "description": "订阅源类型: MP, WEBSITE, PODCAST, NEWSLETTER",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "groupOnly",
+            "in": "query",
+            "schema": {
+              "description": "true 只返回分组内的数据, false 全返回",
+              "default": "true",
+              "type": "boolean",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "分组ID",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "description": {
+                        "description": "订阅源简介",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "img": {
+                        "description": "订阅源头像或 Logo",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "inGroup": {
+                        "description": "是否在分组中",
+                        "type": "boolean",
+                        "x-apicat-mock": "boolean"
+                      },
+                      "name": {
+                        "description": "订阅源名称",
+                        "type": "string",
+                        "x-apicat-mock": "name"
+                      },
+                      "sourceId": {
+                        "description": "订阅源 ID",
+                        "type": "integer",
+                        "x-apicat-mock": "integer"
+                      },
+                      "sourceType": {
+                        "description": "订阅源类型",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "unreadCount": {
+                        "description": "订阅源文章未读数(仅groupOnly为true时返回)",
+                        "type": "integer",
+                        "x-apicat-mock": "integer"
+                      }
+                    },
+                    "type": "object",
+                    "required": [
+                      "sourceType",
+                      "sourceId",
+                      "name",
+                      "img",
+                      "description",
+                      "inGroup"
+                    ],
+                    "x-apicat-orders": [
+                      "sourceType",
+                      "sourceId",
+                      "name",
+                      "img",
+                      "description",
+                      "inGroup",
+                      "unreadCount"
+                    ],
+                    "x-apicat-mock": "object"
+                  },
+                  "type": "array",
+                  "x-apicat-mock": "array"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Response Name"
+          }
+        }
+      },
+      "post": {
+        "summary": "编辑分组订阅源",
+        "operationId": "1604",
+        "tags": [
+          "订阅分组"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "分组 ID",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "items": {
+                  "properties": {
+                    "sourceId": {
+                      "description": "订阅源 ID",
+                      "type": "integer",
+                      "x-apicat-mock": "integer"
+                    },
+                    "sourceType": {
+                      "description": "订阅源类型: MP, WEBSITE, PODCAST, NEWSLETTER",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "sourceType",
+                    "sourceId"
+                  ],
+                  "x-apicat-orders": [
+                    "sourceType",
+                    "sourceId"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "type": "array",
+                "x-apicat-mock": "array"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "content": {
+              "none": {}
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/mps": {
+      "get": {
+        "summary": "公众号列表",
+        "operationId": "1493",
+        "tags": [
+          "公众号相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "keywords",
+            "in": "query",
+            "schema": {
+              "description": "搜索关键词",
+              "type": "string",
+              "x-apicat-mock": "name"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "x-apicat-mock": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "description": {
+                        "description": "公众号简介",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "id": {
+                        "description": "公众号 ID",
+                        "type": "integer",
+                        "x-apicat-mock": "integer"
+                      },
+                      "img": {
+                        "description": "公众号头像",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "isSubscribed": {
+                        "description": "用户是否已订阅",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "name": {
+                        "description": "公众号名称",
+                        "type": "string",
+                        "x-apicat-mock": "name"
+                      },
+                      "sourceType": {
+                        "description": "信息源类型",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      }
+                    },
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "isSubscribed",
+                      "name",
+                      "img",
+                      "description",
+                      "sourceType"
+                    ],
+                    "x-apicat-orders": [
+                      "id",
+                      "isSubscribed",
+                      "name",
+                      "img",
+                      "description",
+                      "sourceType"
+                    ],
+                    "x-apicat-mock": "object"
+                  },
+                  "type": "array",
+                  "x-apicat-mock": "array"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "[\n    {\n        \"id\": 42,\n        \"isSubscribed\": false,\n        \"name\": \"歸藏的AI工具箱\",\n        \"img\": \"http://wx.qlogo.cn/mmhead/Q3auHgzwzM6aHg7MdLJm6RMkHHHQfQVBIy2Sia8EFFlMdsyKUOpm3Tg/0\",\n        \"description\": \"产品设计师🎨 AI画图工具操作员🔧 AI课程撰写与信息收集整理📰 致力于发掘借助AI工具改善设计与产品开发流程的各种可能性🤔\",\n        \"sourceType\": \"MP\"\n    },\n    {\n        \"id\": 108,\n        \"isSubscribed\": false,\n        \"name\": \"果粉俱乐部\",\n        \"img\": \"http://wx.qlogo.cn/mmhead/Q3auHgzwzM7YZLbzaCCMFvAxiaaP4nKg9yrSca34a7ADtenYoTx1qvw/0\",\n        \"description\": \"始于苹果，不止于苹果，分享值得分享的信息，让科技更好的服务生活。\",\n        \"sourceType\": \"MP\"\n    },\n    {\n        \"id\": 81,\n        \"isSubscribed\": false,\n        \"name\": \"PaperAgent\",\n        \"img\": \"http://wx.qlogo.cn/mmhead/bVy2VQVTWzYFuicgJ9TpdkurRPKI43rjS5BPChxjksiawoBk6G65yVkoOV945VpXJ6WXFNLHuCuWg/0\",\n        \"description\": \"日更，解读AI前沿技术热点Paper\",\n        \"sourceType\": \"MP\"\n    },\n    {\n        \"id\": 102,\n        \"isSubscribed\": false,\n        \"name\": \"中国企业家杂志\",\n        \"img\": \"http://wx.qlogo.cn/mmhead/Q3auHgzwzM7w21sATPDXupiaVT01lfibXzCT69fN7SFXZHEu2nJorGmg/0\",\n        \"description\": \"讲好企业家故事，弘扬企业家精神\",\n        \"sourceType\": \"MP\"\n    },\n    {\n        \"id\": 87,\n        \"isSubscribed\": false,\n        \"name\": \"高可用架构\",\n        \"img\": \"http://wx.qlogo.cn/mmhead/Q3auHgzwzM4DkCqSIEoCCu1zKRml7uqGFXL2Phiag9FPlfknIpcCxdw/0\",\n        \"description\": \"高可用架构公众号。\",\n        \"sourceType\": \"MP\"\n    }\n]"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse-62"
+          }
+        }
+      },
+      "post": {
+        "summary": "添加新的公众号",
+        "operationId": "1516",
+        "tags": [
+          "公众号相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "mpId": {
+                    "description": "公众号 ID",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "mpId"
+                ],
+                "x-apicat-orders": [
+                  "mpId"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n    \"message\": \"订阅成功\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/mps/search-tasks": {
+      "post": {
+        "summary": "创建搜索任务",
+        "operationId": "1514",
+        "tags": [
+          "公众号相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "description": "公众号名称",
+                    "type": "string",
+                    "x-apicat-mock": "name"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "x-apicat-orders": [
+                  "name"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "searchId": {
+                      "description": "搜索 ID",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "searchId"
+                  ],
+                  "x-apicat-orders": [
+                    "searchId"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/mps/search-tasks/{searchId}": {
+      "delete": {
+        "summary": "取消搜索任务",
+        "operationId": "1517",
+        "tags": [
+          "公众号相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "searchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "default": "搜索 ID",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "content": {
+              "none": {}
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      },
+      "get": {
+        "summary": "查询搜索任务结果",
+        "operationId": "1515",
+        "tags": [
+          "公众号相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "searchId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "搜索 ID",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "finished": {
+                      "description": "任务是否已经完成",
+                      "type": "boolean",
+                      "x-apicat-mock": "boolean"
+                    },
+                    "message": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "mp": {
+                      "properties": {
+                        "description": {
+                          "description": "公众号简介",
+                          "type": "string",
+                          "x-apicat-mock": "string"
+                        },
+                        "img": {
+                          "description": "公众号头像",
+                          "type": "string",
+                          "x-apicat-mock": "string"
+                        },
+                        "mpId": {
+                          "description": "公众号 ID",
+                          "type": "string",
+                          "x-apicat-mock": "string"
+                        },
+                        "name": {
+                          "description": "公众号名称",
+                          "type": "string",
+                          "x-apicat-mock": "name"
+                        }
+                      },
+                      "type": "object",
+                      "required": [
+                        "mpId",
+                        "name",
+                        "img",
+                        "description"
+                      ],
+                      "x-apicat-orders": [
+                        "mpId",
+                        "name",
+                        "img",
+                        "description"
+                      ],
+                      "x-apicat-mock": "object"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "finished",
+                    "message",
+                    "mp"
+                  ],
+                  "x-apicat-orders": [
+                    "finished",
+                    "message",
+                    "mp"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/onboarding/recommend-sources": {
+      "post": {
+        "summary": "获取推荐信息源",
+        "operationId": "1700",
+        "tags": [
+          "Onboarding"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "tags": {
+                    "description": "标签数组",
+                    "items": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "type": "array",
+                    "x-apicat-mock": "array"
+                  }
+                },
+                "type": "object",
+                "x-apicat-orders": [
+                  "tags"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/信息源基本信息-1405"
+                  },
+                  "type": "array",
+                  "x-apicat-mock": "array"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/onboarding/tags": {
+      "get": {
+        "summary": "获取兴趣标签列表",
+        "operationId": "1699",
+        "tags": [
+          "Onboarding"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "category": {
+                        "description": "分类名称",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "tags": {
+                        "description": "标签名称列表",
+                        "items": {
+                          "type": "string",
+                          "x-apicat-mock": "string"
+                        },
+                        "type": "array",
+                        "x-apicat-mock": "array"
+                      }
+                    },
+                    "type": "object",
+                    "required": [
+                      "category",
+                      "tags"
+                    ],
+                    "x-apicat-orders": [
+                      "category",
+                      "tags"
+                    ],
+                    "x-apicat-mock": "object"
+                  },
+                  "type": "array",
+                  "x-apicat-mock": "array"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/orders": {
+      "post": {
+        "summary": "创建支付订单",
+        "operationId": "1523",
+        "tags": [
+          "订单"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "payType": {
+                    "description": "支付方式: ALIPAY, COUPON",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "period": {
+                    "description": "周期: MONTHLY, YEARLY",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "planType": {
+                    "description": "订阅计划类型: BASE, PREMIUM, PRO",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "planType",
+                  "period",
+                  "payType"
+                ],
+                "x-apicat-orders": [
+                  "planType",
+                  "period",
+                  "payType"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "orderNo": {
+                      "description": "订单号",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "qrcodeUrl": {
+                      "description": "二维码链接",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "orderNo",
+                    "qrcodeUrl"
+                  ],
+                  "x-apicat-orders": [
+                    "orderNo",
+                    "qrcodeUrl"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/orders/coupons": {
+      "post": {
+        "summary": "使用优惠券",
+        "operationId": "1525",
+        "tags": [
+          "订单"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "code": {
+                    "description": "券码",
+                    "type": "string",
+                    "x-apicat-mock": "httpcode"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "code"
+                ],
+                "x-apicat-orders": [
+                  "code"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "description": "使用成功提示",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n  \"message\": \"您已成功兑换基础版会员30天\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/orders/{orderNo}/status": {
+      "get": {
+        "summary": "查询订单状态",
+        "operationId": "1524",
+        "tags": [
+          "订单"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "orderNo",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "status": {
+                      "description": "订单状态: SUCCESS, PENDING, FAILED",
+                      "type": "string",
+                      "x-apicat-mock": "httpcode"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "status"
+                  ],
+                  "x-apicat-orders": [
+                    "status"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/recommendations": {
+      "get": {
+        "summary": "推荐",
+        "operationId": "1689",
+        "tags": [
+          "发现"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "recommendedContents": {
+                      "description": "推荐的内容",
+                      "items": {
+                        "$ref": "#/components/schemas/内容基本信息-1406"
+                      },
+                      "type": "array",
+                      "x-apicat-mock": "array"
+                    },
+                    "recommendedSources": {
+                      "description": "推荐的信源",
+                      "items": {
+                        "$ref": "#/components/schemas/信息源基本信息-1405"
+                      },
+                      "type": "array",
+                      "x-apicat-mock": "array"
+                    }
+                  },
+                  "type": "object",
+                  "x-apicat-orders": [
+                    "recommendedSources",
+                    "recommendedContents"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/search": {
+      "get": {
+        "summary": "搜索",
+        "operationId": "1690",
+        "tags": [
+          "发现"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "搜索类型: ALL, MP, WEBSITE, CONTENT",
+              "default": "ALL",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "keywords",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "关键词",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "页码",
+              "default": "1",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "每页记录数",
+              "default": "10",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "prompts": {
+                      "description": "推荐的 prompt",
+                      "items": {
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "type": "array",
+                      "x-apicat-mock": "array"
+                    },
+                    "recommendations": {
+                      "description": "推荐的信息源",
+                      "items": {
+                        "$ref": "#/components/schemas/信息源基本信息-1405"
+                      },
+                      "type": "array",
+                      "x-apicat-mock": "array"
+                    },
+                    "results": {
+                      "description": "搜索结果",
+                      "items": {
+                        "properties": {
+                          "data": {
+                            "anyOf": [
+                              {
+                                "$ref": "#/components/schemas/信息源基本信息-1405"
+                              },
+                              {
+                                "$ref": "#/components/schemas/内容基本信息-1406"
+                              }
+                            ]
+                          },
+                          "type": {
+                            "description": "数据类型: SOURCE or CONTENT",
+                            "type": "string",
+                            "x-apicat-mock": "string"
+                          }
+                        },
+                        "type": "object",
+                        "required": [
+                          "type",
+                          "data"
+                        ],
+                        "x-apicat-orders": [
+                          "type",
+                          "data"
+                        ],
+                        "x-apicat-mock": "object"
+                      },
+                      "type": "array",
+                      "x-apicat-mock": "array"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "results",
+                    "recommendations",
+                    "prompts"
+                  ],
+                  "x-apicat-orders": [
+                    "results",
+                    "recommendations",
+                    "prompts"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/settings/email/verification-code": {
+      "post": {
+        "summary": "给新邮箱发送验证码",
+        "operationId": "1487",
+        "tags": [
+          "个人设置"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "x-apicat-mock": "email"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "x-apicat-orders": [
+                  "email"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n    \"message\": \"验证码已发送到新邮箱，请查收\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse-62"
+          }
+        }
+      }
+    },
+    "/api/settings/email/verify": {
+      "post": {
+        "summary": "验证新邮箱的验证码",
+        "operationId": "1491",
+        "tags": [
+          "个人设置"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "code": {
+                    "description": "4位数字字符串",
+                    "type": "string",
+                    "x-apicat-mock": "httpcode"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "code"
+                ],
+                "x-apicat-orders": [
+                  "code"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n    \"message\": \"邮箱修改成功\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse-62"
+          }
+        }
+      }
+    },
+    "/api/settings/feed": {
+      "get": {
+        "summary": "获取 Feed 设置",
+        "operationId": "1506",
+        "tags": [
+          "个人设置"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "feedOriginalDesc": {
+                      "description": "原摘要 true开启 false关闭",
+                      "type": "boolean",
+                      "x-apicat-mock": "boolean"
+                    },
+                    "feedOriginalTitle": {
+                      "description": "原标题 true开启 false关闭",
+                      "type": "boolean",
+                      "x-apicat-mock": "boolean"
+                    },
+                    "feedToken": {
+                      "description": "Feed token",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "feedToken",
+                    "feedOriginalTitle",
+                    "feedOriginalDesc"
+                  ],
+                  "x-apicat-orders": [
+                    "feedToken",
+                    "feedOriginalTitle",
+                    "feedOriginalDesc"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      },
+      "put": {
+        "summary": "修改 Feed 设置",
+        "operationId": "1507",
+        "tags": [
+          "个人设置"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "feedOriginalDesc": {
+                    "description": "原摘要 true开启 false关闭",
+                    "type": "boolean",
+                    "x-apicat-mock": "boolean"
+                  },
+                  "feedOriginalTitle": {
+                    "description": "原标题 true开启 false关闭",
+                    "type": "boolean",
+                    "x-apicat-mock": "boolean"
+                  },
+                  "feedToken": {
+                    "description": "true 重置",
+                    "type": "boolean",
+                    "x-apicat-mock": "boolean"
+                  }
+                },
+                "type": "object",
+                "x-apicat-orders": [
+                  "feedToken",
+                  "feedOriginalTitle",
+                  "feedOriginalDesc"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "feedOriginalDesc": {
+                      "description": "原摘要 true开启 false关闭",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "feedOriginalTitle": {
+                      "description": "原标题 true开启 false关闭",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "feedToken": {
+                      "description": "新的 Feed Token",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "x-apicat-orders": [
+                    "feedToken",
+                    "feedOriginalTitle",
+                    "feedOriginalDesc"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/settings/password": {
+      "put": {
+        "summary": "修改密码",
+        "operationId": "1488",
+        "tags": [
+          "个人设置"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "newPassword": {
+                    "description": "公钥加密",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "oldPassword": {
+                    "description": "公钥加密",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "oldPassword",
+                  "newPassword"
+                ],
+                "x-apicat-orders": [
+                  "oldPassword",
+                  "newPassword"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n    \"message\": \"密码修改成功\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse-62"
+          }
+        }
+      }
+    },
+    "/api/subscriptions": {
+      "delete": {
+        "summary": "取消订阅信息源",
+        "operationId": "1496",
+        "tags": [
+          "订阅相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "sourceId": {
+                    "description": "信息源 ID",
+                    "type": "integer",
+                    "x-apicat-mock": "integer"
+                  },
+                  "sourceType": {
+                    "description": "信息源类型",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "sourceType",
+                  "sourceId"
+                ],
+                "x-apicat-orders": [
+                  "sourceType",
+                  "sourceId"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n    \"message\": \"取消订阅成功\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse-62"
+          }
+        }
+      },
+      "get": {
+        "summary": "订阅源列表",
+        "operationId": "1504",
+        "tags": [
+          "订阅相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "sourceType",
+            "in": "query",
+            "schema": {
+              "description": "信息源类型: MP 公众号, WEBSITE 网站",
+              "default": "",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "description": {
+                      "description": "信息源简介",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "img": {
+                      "description": "信息源图片",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "name": {
+                      "description": "信息源名称",
+                      "type": "string",
+                      "x-apicat-mock": "name"
+                    },
+                    "sourceId": {
+                      "description": "信息源 ID",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "sourceType": {
+                      "description": "信息源类型",
+                      "type": "integer",
+                      "x-apicat-mock": "integer"
+                    },
+                    "unreadCount": {
+                      "description": "未读文章数",
+                      "type": "integer",
+                      "x-apicat-mock": "integer"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "sourceType",
+                    "sourceId",
+                    "name",
+                    "img",
+                    "description",
+                    "unreadCount"
+                  ],
+                  "x-apicat-orders": [
+                    "sourceType",
+                    "sourceId",
+                    "name",
+                    "img",
+                    "description",
+                    "unreadCount"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      },
+      "post": {
+        "summary": "订阅信息源",
+        "operationId": "1495",
+        "tags": [
+          "订阅相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "groupIds": {
+                    "description": "分组 ID",
+                    "items": {
+                      "type": "integer",
+                      "x-apicat-mock": "integer"
+                    },
+                    "type": "array",
+                    "x-apicat-mock": "array"
+                  },
+                  "sourceId": {
+                    "description": "信息源 ID",
+                    "type": "integer",
+                    "x-apicat-mock": "integer"
+                  },
+                  "sourceType": {
+                    "description": "信息源类型",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "sourceType",
+                  "sourceId"
+                ],
+                "x-apicat-orders": [
+                  "sourceType",
+                  "sourceId",
+                  "groupIds"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n    \"message\": \"订阅成功\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse-62"
+          }
+        }
+      }
+    },
+    "/api/subscriptions/contents": {
+      "get": {
+        "summary": "订阅源文章列表",
+        "operationId": "1505",
+        "tags": [
+          "订阅相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "sourceType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "信息源类型: MP 公众号, WEBSITE 网站",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "sourceId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "信息源 ID",
+              "type": "integer",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "unread未读列表 all全部列表",
+              "default": "unread",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "x-apicat-mock": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "articleId": {
+                        "description": "文章ID",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "coverImage": {
+                        "description": "封面图",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "isRead": {
+                        "description": "是否已读",
+                        "type": "boolean",
+                        "x-apicat-mock": "boolean"
+                      },
+                      "publishedAt": {
+                        "description": "发布时间时间戳",
+                        "type": "integer",
+                        "x-apicat-mock": "integer"
+                      },
+                      "summary": {
+                        "description": "摘要",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "tags": {
+                        "items": {
+                          "description": "话题标签，例如: [\"人工智能\",\"AI\"]",
+                          "type": "string",
+                          "x-apicat-mock": "string"
+                        },
+                        "type": "array",
+                        "x-apicat-mock": "array"
+                      },
+                      "title": {
+                        "description": "文章标题",
+                        "type": "string",
+                        "x-apicat-mock": "title"
+                      },
+                      "url": {
+                        "description": "文章链接",
+                        "type": "string",
+                        "x-apicat-mock": "url"
+                      }
+                    },
+                    "type": "object",
+                    "required": [
+                      "articleId",
+                      "url",
+                      "title",
+                      "coverImage",
+                      "tags",
+                      "summary",
+                      "publishedAt",
+                      "isRead"
+                    ],
+                    "x-apicat-orders": [
+                      "articleId",
+                      "url",
+                      "title",
+                      "coverImage",
+                      "tags",
+                      "summary",
+                      "publishedAt",
+                      "isRead"
+                    ],
+                    "x-apicat-mock": "object"
+                  },
+                  "type": "array",
+                  "x-apicat-mock": "array"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success demo",
+                    "value": "[\n    {\n        \"url\": \"https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==\u0026mid=2247507915\u0026idx=1\u0026sn=bd2f9674aba24b96c2778efaedefa798\",\n        \"title\": \"零零科技王孟秋谈创业与飞行相机前景\",\n        \"coverImage\": \"https://mmbiz.qpic.cn/sz_mmbiz_jpg/Z300vPwLQknibv7MFe8uprPr4vNQibibOshiauY52e12wGZQ6YgsKJw3kQSOJfibQiaZvmHY1EskpuKySnVeRXeQ6bfg/0?wx_fmt=jpeg\",\n        \"tags\": [\n            \"计算机视觉\",\n            \"嵌入式人工智能\",\n            \"机器人技术\",\n            \"硬件创新\",\n            \"产品设计\"\n        ],\n        \"summary\": \"零零科技创始人王孟秋分享了公司十一年来的创业历程和生存之道。他强调选择正确的方向（“找对‘0’点”）比盲目创新更重要，公司专注于高难度的飞行相机研发，通过软硬件高度集成和长期投入构筑护城河。王孟秋认为飞行相机有望成为继扫地机器人之后的下一个千万级家用机器人市场，并展望了未来技术发展和市场竞争的前景。\",\n        \"publishedAt\": \"2025-06-18 11:49:46\",\n        \"isRead\": false\n    },\n    {\n        \"url\": \"https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==\u0026mid=2247507915\u0026idx=2\u0026sn=69d5deb6ab3a2a96ae86d08fb4c4b770\",\n        \"title\": \"Cursor开发商Anysphere洽谈新一轮融资\",\n        \"coverImage\": \"https://mmbiz.qpic.cn/sz_mmbiz_jpg/Z300vPwLQkmLoFL46wdIQ3EoEFRcW64slhPCOeZ3dMrYzH3wv5IMpHWB8FypKxJ6srQiczP3BmVmYHYrdCwW7rQ/0?wx_fmt=jpeg\",\n        \"tags\": [\n            \"人工智能\",\n            \"风险投资\",\n            \"初创企业\",\n            \"软件开发\",\n            \"企业融资\"\n        ],\n        \"summary\": \"文章主要报道了人工智能代码编辑器Cursor的开发商Anysphere公司正在与投资者洽谈新一轮融资，估值可能达到180亿至200亿美元。该公司近期年化收入突破5亿美元，并获得了由Thrive Capital领投的9亿美元融资。Cursor产品受到多家大型企业的青睐，但同时也面临来自GitHub Copilot和Amazon CodeWhisperer的竞争。此外，文章还提到了Z Potentials社群的招募信息和宣传海报。\",\n        \"publishedAt\": \"2025-06-18 11:49:46\",\n        \"isRead\": false\n    },\n    {\n        \"url\": \"https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==\u0026mid=2247507915\u0026idx=3\u0026sn=4c63d36a16bfd9070c2415af3bb36a8d\",\n        \"title\": \"扎克伯格高薪挖角OpenAI核心成员遭拒\",\n        \"coverImage\": \"https://mmbiz.qpic.cn/sz_mmbiz_jpg/Z300vPwLQkmLoFL46wdIQ3EoEFRcW64sEtE0K3ssCQAInDHCFgrNiaWNeJ2UDBEa6fzlOgfNSwtUEXwtBaDl72Q/0?wx_fmt=jpeg\",\n        \"tags\": [\n            \"人工智能\",\n            \"人才招聘\",\n            \"企业竞争\",\n            \"创新文化\",\n            \"社交媒体\"\n        ],\n        \"summary\": \"Meta CEO马克·扎克伯格近期试图通过高薪挖角OpenAI和Google DeepMind的顶尖AI研究人员，以组建新的超级智能团队。然而，OpenAI CEO萨姆·阿尔特曼在播客中表示，尽管Meta提供了高达1亿美元的签约奖金和丰厚薪酬，OpenAI的核心成员并未接受。阿尔特曼认为OpenAI的创新文化和AGI（通用人工智能）使命更具吸引力，而Meta缺乏创新文化。Meta虽已招募部分AI明星研究员，但在AI竞赛中仍面临挑战。OpenAI计划发布开源AI模型，可能进一步拉开与Meta的差距。此外，OpenAI和Meta均在探索AI驱动的社交网络应用，未来可能在AI领域展开更激烈的竞争。\",\n        \"publishedAt\": \"2025-06-18 11:49:46\",\n        \"isRead\": false\n    },\n    {\n        \"url\": \"https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==\u0026mid=2247507915\u0026idx=4\u0026sn=c8c591840d07057b1df3f9711d013bb6\",\n        \"title\": \"红杉领投AI律所Crosby革新合同审查\",\n        \"coverImage\": \"https://mmbiz.qpic.cn/sz_mmbiz_jpg/Z300vPwLQkmLoFL46wdIQ3EoEFRcW64sWy79j3U4u2BGF3icY3tAPzAOib32ugyF7CzZmp56ghwm9eRAnMmJE6Dg/0?wx_fmt=jpeg\",\n        \"tags\": [\n            \"人工智能\",\n            \"法律服务\",\n            \"创业投资\",\n            \"合同审查\",\n            \"LLMs\"\n        ],\n        \"summary\": \"文章主要介绍了由红杉资本领投的律所初创公司Crosby，该公司利用人工智能技术提供快速法律服务，特别是在合同审查方面。Crosby直接雇佣律师使用其内部开发的AI软件，承诺在不到一小时内完成合同审查，并计划进一步缩短时间。联合创始人Ryan Daniels和John Sarihan分享了他们的创业背景和愿景，认为要真正改变法律行业，必须端到端掌控整个流程。红杉资本的陈嘉欣解释了投资决策的依据，强调了团队和市场洞察的重要性。\",\n        \"publishedAt\": \"2025-06-18 11:49:46\",\n        \"isRead\": true\n    },\n    {\n        \"url\": \"https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==\u0026mid=2247507902\u0026idx=1\u0026sn=7984456a387d28ec230c9e37f49be872\",\n        \"title\": \"具身智能新突破：机器人灵巧操作研究进展\",\n        \"coverImage\": \"https://mmbiz.qpic.cn/sz_mmbiz_jpg/Z300vPwLQkk7OfgFp2L3rsdyBqAibRcqNOm4BEtNZtrUoia19Vhz7MaGuaVSIc5Xvhw34tgKPGmAyAib2ZuRHpBZQ/0?wx_fmt=jpeg\",\n        \"tags\": [\n            \"具身智能\",\n            \"机器人学习\",\n            \"多模态感知\",\n            \"强化学习\",\n            \"灵巧操作\"\n        ],\n        \"summary\": \"文章主要介绍了具身智能领域的最新研究进展，特别是加州大学伯克利分校博士生Haozhi Qi及其团队在机器人灵巧操作和多模态感知方面的突破性工作。重点包括两项代表性研究：PenSpin（实现机器人手指间笔状物体的连续旋转）和RotateIt（实现对任意物体的通用旋转控制）。这些研究融合了视觉、触觉和本体感知，通过强化学习和策略迁移技术，推动了AI在现实世界中的精细操控能力。团队由来自UC Berkeley、Meta AI等顶尖机构的学者组成，研究成果发表在CoRL等顶级会议上。\",\n        \"publishedAt\": \"2025-06-17 12:32:41\",\n        \"isRead\": true\n    },\n    {\n        \"url\": \"https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==\u0026mid=2247507902\u0026idx=2\u0026sn=af9a95cdc8d0dd352af294175a92aca7\",\n        \"title\": \"Jenny Wang的AI造型助手Alta获1100万美元融资\",\n        \"coverImage\": \"https://mmbiz.qpic.cn/sz_mmbiz_jpg/Z300vPwLQkk7OfgFp2L3rsdyBqAibRcqN3IcDiacof4ces5VAvaHKJia1Aomib3aywfxKib6DrTJuIRx1T0guEUvEtQ/0?wx_fmt=jpeg\",\n        \"tags\": [\n            \"人工智能\",\n            \"消费科技\",\n            \"虚拟形象\",\n            \"个性化推荐\",\n            \"时尚科技\"\n        ],\n        \"summary\": \"Jenny Wang创立了AI个人造型助手公司Alta，并获得1100万美元种子轮融资。Alta结合AI技术提供穿搭建议和虚拟试穿功能，用户可上传衣橱内容并获取个性化推荐。公司已与美国时装设计师协会合作，并计划拓展欧洲市场。Jenny Wang凭借科技背景和人脉网络推动项目发展，新资金将用于团队扩张和研发。\",\n        \"publishedAt\": \"2025-06-17 12:32:41\",\n        \"isRead\": true\n    },\n    {\n        \"url\": \"https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==\u0026mid=2247507902\u0026idx=3\u0026sn=dcc4d1b0776c831dd55d64736176ca24\",\n        \"title\": \"Meta140亿美元收购Scale AI 49%股份\",\n        \"coverImage\": \"https://mmbiz.qpic.cn/sz_mmbiz_jpg/Z300vPwLQkk7OfgFp2L3rsdyBqAibRcqNytyHhGAVJfnzKib8K2MicFsRd1ztNpwv4DCIcpy8FeL6DQZLibFHOmNWw/0?wx_fmt=jpeg\",\n        \"tags\": [\n            \"人工智能\",\n            \"投资并购\",\n            \"初创企业\",\n            \"股权交易\",\n            \"反垄断\"\n        ],\n        \"summary\": \"Meta与Scale AI达成一项重大交易，以约140亿美元收购Scale AI 49%的股份，略高于其上一轮融资估值。Scale AI创始人Alexandr Wang将加入Meta，可能担任首席AI官，助力Meta在AI领域的发展。交易中，Meta获得了优先清算权等保护条款，确保其在Scale AI被出售时的利益。尽管Scale AI近期未达财务预期，但其估值在AI热潮下仍大幅飙升。交易还需反垄断监管机构批准，最终可能形成Meta与王共同控制Scale AI的局面。\",\n        \"publishedAt\": \"2025-06-17 12:32:41\",\n        \"isRead\": true\n    },\n    {\n        \"url\": \"https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==\u0026mid=2247507879\u0026idx=1\u0026sn=d59805d121dc96c396c7cf1019efcade\",\n        \"title\": \"南京因克斯半年融资亿元 专注机器人核心硬件\",\n        \"coverImage\": \"https://mmbiz.qpic.cn/sz_mmbiz_jpg/Z300vPwLQkmlffqUibsibR0u4McA6KbuJw2ICshdUxAClCGVjmsLKNMw8bAib1V8y9rTPh5nuOlqOERV4gEj1hPtw/0?wx_fmt=jpeg\",\n        \"tags\": [\n            \"机器人技术\",\n            \"具身智能\",\n            \"关节模组\",\n            \"灵巧手\",\n            \"智能电池\"\n        ],\n        \"summary\": \"南京因克斯智能科技有限公司在半年内完成3轮融资，累计金额达亿元，专注于为具身和人形机器人提供核心零部件及硬件解决方案。公司由南京航空航天大学背景的团队创立，CEO祝宗煌凭借技术实力和行业洞察，使因克斯成为关节模组领域的领军企业。其产品出货量、行业口碑和客户覆盖均领先，并已扩展至灵巧手、通信模组和智能电池等产品线，构建完整硬件生态。因克斯以全栈自主研发和自建生产体系构建竞争壁垒，致力于成为机器人行业的硬件系统方案提供者，推动具身智能产业化发展。\",\n        \"publishedAt\": \"2025-06-16 11:12:09\",\n        \"isRead\": true\n    },\n    {\n        \"url\": \"https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==\u0026mid=2247507879\u0026idx=2\u0026sn=4821eb5a7c54cb146b31f8947c1bd7e6\",\n        \"title\": \"吴恩达谈Agent系统构建与AI未来趋势\",\n        \"coverImage\": \"https://mmbiz.qpic.cn/sz_mmbiz_jpg/Z300vPwLQkmTckng4p8Hhic7aShUWicibmeaKVqKTCibYOxEcY7XXNgtbBrMhMOibBAaYj7EAhibicst4d6N4RZnV1mfw/0?wx_fmt=jpeg\",\n        \"tags\": [\n            \"Agentic系统\",\n            \"语音技术栈\",\n            \"AI辅助编程\",\n            \"MCP协议\",\n            \"多Agent通信\"\n        ],\n        \"summary\": \"文章记录了吴恩达（Andrew Ng）与Harrison在LangChain主办的Agent大会上的深度对话，探讨了Agentic系统构建、MCP协议、语音交互、AI辅助编码等前沿话题。吴恩达强调了Agentic性光谱的概念，认为应关注系统的自治程度而非是否严格定义为Agent。他分享了构建AI系统的实操经验，包括流程拆解、评估体系建立以及工具组合的重要性。此外，吴恩达还指出了语音技术栈和AI辅助编程的潜力，认为未来最关键的技能是能准确告诉计算机需求。对话还涉及MCP协议的未来发展、多Agent协作的挑战以及AI时代编程技能的转变。\",\n        \"publishedAt\": \"2025-06-16 11:12:09\",\n        \"isRead\": true\n    },\n    {\n        \"url\": \"https://mp.weixin.qq.com/s?__biz=MzI4NTgxMDk1NA==\u0026mid=2247507879\u0026idx=3\u0026sn=0ba33889cbe1b846398a354f04c00e41\",\n        \"title\": \"Warp获1000万美元融资推进物流自动化\",\n        \"coverImage\": \"https://mmbiz.qpic.cn/sz_mmbiz_jpg/Z300vPwLQkmTckng4p8Hhic7aShUWicibmemicZE95hhBVq0F0ztLjxa9nzMFYnLCoqzSkauA1uUHfgYBBraoZSv6g/0?wx_fmt=jpeg\",\n        \"tags\": [\n            \"人工智能\",\n            \"机器人技术\",\n            \"计算机视觉\",\n            \"供应链优化\",\n            \"自动化\"\n        ],\n        \"summary\": \"Warp是一家成立于2021年的物流技术公司，致力于通过AI和机器人技术优化货运供应链。公司联合创始人兼CEO丹尼尔·索科洛夫斯基表示，Warp正在仓库内部工作流程中引入自动化技术，包括计算机视觉和机器人技术，以提高效率并降低成本。Warp已在洛杉矶的测试仓库部署了摄像头系统，并创建了数字孪生体进行实验。公司最新筹集了1000万美元的A轮融资，计划在核心物流网络的仓库中部署机器人。Warp强调其并非单纯的机器人或AI公司，而是专注于为客户创造价值的物流企业。\",\n        \"publishedAt\": \"2025-06-16 11:12:09\",\n        \"isRead\": true\n    }\n]"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/subscriptions/contents/mark-as-read": {
+      "post": {
+        "summary": "标记已读",
+        "operationId": "1676",
+        "tags": [
+          "订阅相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "contentId": {
+                    "description": "内容 ID（传此 ID 表示只标记某一篇为已读）",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "sourceId": {
+                    "description": "信息源 ID",
+                    "type": "integer",
+                    "x-apicat-mock": "integer"
+                  },
+                  "sourceType": {
+                    "description": "信息源类型",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "sourceType",
+                  "sourceId"
+                ],
+                "x-apicat-orders": [
+                  "sourceType",
+                  "sourceId",
+                  "contentId"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "content": {
+              "none": {}
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/subscriptions/contents/unread-count": {
+      "get": {
+        "summary": "获取订阅源未读文章数",
+        "operationId": "1677",
+        "tags": [
+          "订阅相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "sourceType",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "信息源类型: MP 公众号, WEBSITE 网站",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "sourceId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "信息源 ID",
+              "type": "integer",
+              "x-apicat-mock": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "unreadCount": {
+                      "description": "未读文章数",
+                      "type": "integer",
+                      "x-apicat-mock": "integer"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "unreadCount"
+                  ],
+                  "x-apicat-orders": [
+                    "unreadCount"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/subscriptions/feed": {
+      "get": {
+        "summary": "获取订阅源 Feed 链接",
+        "operationId": "1549",
+        "tags": [
+          "订阅相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "sourceType",
+            "in": "query",
+            "schema": {
+              "description": "信息源类型: MP, WEBSITE",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "sourcdId",
+            "in": "query",
+            "schema": {
+              "description": "信息源 ID",
+              "type": "integer",
+              "x-apicat-mock": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "atom": {
+                      "description": "Atom 格式链接",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "json": {
+                      "description": "JSON 格式链接",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "rss": {
+                      "description": "RSS2.0 格式链接",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "rss",
+                    "atom",
+                    "json"
+                  ],
+                  "x-apicat-orders": [
+                    "rss",
+                    "atom",
+                    "json"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n    \"rss\": \"http://localhost:3000/feed/0260f97e-fdf5-4b4a-b885-5a7f54caa222/subscriptions/rss\",\n    \"atom\": \"http://localhost:3000/feed/0260f97e-fdf5-4b4a-b885-5a7f54caa222/subscriptions/atom\",\n    \"json\": \"http://localhost:3000/feed/0260f97e-fdf5-4b4a-b885-5a7f54caa222/subscriptions/json\",\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/user/info": {
+      "get": {
+        "summary": "获取用户信息",
+        "operationId": "1509",
+        "tags": [
+          "个人设置"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "avatar": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "email": {
+                      "type": "string",
+                      "x-apicat-mock": "email"
+                    },
+                    "endAt": {
+                      "description": "当前订阅到期时间戳",
+                      "type": "integer",
+                      "x-apicat-mock": "integer"
+                    },
+                    "expired": {
+                      "description": "当前订阅是否到期: true OR false",
+                      "type": "boolean",
+                      "x-apicat-mock": "boolean"
+                    },
+                    "google": {
+                      "description": "是否绑定 Google",
+                      "type": "boolean",
+                      "x-apicat-mock": "boolean"
+                    },
+                    "id": {
+                      "type": "integer",
+                      "x-apicat-mock": "integer"
+                    },
+                    "name": {
+                      "type": "string",
+                      "x-apicat-mock": "name"
+                    },
+                    "onboardingCompleted": {
+                      "description": "是否完成onboarding",
+                      "type": "boolean",
+                      "x-apicat-mock": "boolean"
+                    },
+                    "opml": {
+                      "description": "ompl链接",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "referralSourceSubmitted": {
+                      "description": "是否提交过注册渠道",
+                      "type": "boolean",
+                      "x-apicat-mock": "boolean"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "id",
+                    "email",
+                    "name",
+                    "avatar",
+                    "google",
+                    "expired",
+                    "endAt",
+                    "opml",
+                    "onboardingCompleted",
+                    "referralSourceSubmitted"
+                  ],
+                  "x-apicat-orders": [
+                    "id",
+                    "email",
+                    "name",
+                    "avatar",
+                    "google",
+                    "expired",
+                    "endAt",
+                    "opml",
+                    "onboardingCompleted",
+                    "referralSourceSubmitted"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/user/name": {
+      "put": {
+        "summary": "修改用户昵称",
+        "operationId": "1510",
+        "tags": [
+          "个人设置"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "x-apicat-mock": "name"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "name"
+                ],
+                "x-apicat-orders": [
+                  "name"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n    \"message\": \"修改成功\"\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/user/plan": {
+      "get": {
+        "summary": "付费计划详情",
+        "operationId": "1511",
+        "tags": [
+          "付费相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "endAt": {
+                      "description": "订阅过期时间",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "expired": {
+                      "description": "当前订阅是否到期: true OR false",
+                      "type": "boolean",
+                      "x-apicat-mock": "boolean"
+                    },
+                    "planDesc": {
+                      "description": "订阅类型描述",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "planType": {
+                      "description": "订阅类型",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "usages": {
+                      "description": "用量列表",
+                      "items": {
+                        "properties": {
+                          "desc": {
+                            "description": "用量类型描述",
+                            "type": "string",
+                            "x-apicat-mock": "string"
+                          },
+                          "total": {
+                            "description": "最大支持数",
+                            "type": "integer",
+                            "x-apicat-mock": "integer"
+                          },
+                          "type": {
+                            "description": "用量类型",
+                            "type": "string",
+                            "x-apicat-mock": "string"
+                          },
+                          "used": {
+                            "description": "已使用数",
+                            "type": "integer",
+                            "x-apicat-mock": "integer"
+                          }
+                        },
+                        "type": "object",
+                        "required": [
+                          "type",
+                          "desc",
+                          "total",
+                          "used"
+                        ],
+                        "x-apicat-orders": [
+                          "type",
+                          "desc",
+                          "total",
+                          "used"
+                        ],
+                        "x-apicat-mock": "object"
+                      },
+                      "type": "array",
+                      "x-apicat-mock": "array"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "expired",
+                    "planType",
+                    "planDesc",
+                    "endAt",
+                    "usages"
+                  ],
+                  "x-apicat-orders": [
+                    "expired",
+                    "planType",
+                    "planDesc",
+                    "endAt",
+                    "usages"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "{\n    \"expired\": false,\n    \"planType\": \"BASE\",\n    \"planDesc\": \"基础版\",\n    \"endAt\": \"2025-07-20 16:49:54\",\n    \"usages\": [\n        {\n            \"total\": 50,\n            \"used\": 7,\n            \"type\": \"MP\",\n            \"desc\": \"公众号订阅数\"\n        }\n    ]\n}"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/user/plans": {
+      "get": {
+        "summary": "付费记录列表",
+        "operationId": "1512",
+        "tags": [
+          "付费相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "x-apicat-mock": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "createdAt": {
+                      "description": "记录创建时间",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "endAt": {
+                      "description": "订阅过期时间",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "memo": {
+                      "description": "记录备注",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "paymentId": {
+                      "description": "支付 ID",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "paymentType": {
+                      "description": "支付类型: COUPON, ALIPAY",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "planDesc": {
+                      "description": "订阅类型描述",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "planType": {
+                      "description": "订阅类型",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    },
+                    "startAt": {
+                      "description": "订阅生效时间",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "planType",
+                    "planDesc",
+                    "startAt",
+                    "endAt",
+                    "paymentType",
+                    "paymentId",
+                    "memo",
+                    "createdAt"
+                  ],
+                  "x-apicat-orders": [
+                    "planType",
+                    "planDesc",
+                    "startAt",
+                    "endAt",
+                    "paymentType",
+                    "paymentId",
+                    "memo",
+                    "createdAt"
+                  ],
+                  "x-apicat-mock": "object"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "[\n    {\n        \"planType\": \"BASE\",\n        \"planDesc\": \"基础版\",\n        \"startAt\": \"2025-06-20 16:49:54\",\n        \"endAt\": \"2025-07-20 16:49:54\",\n        \"paymentType\": \"COUPON\",\n        \"paymentId\": \"new_user\",\n        \"memo\": \"New User\",\n        \"createdAt\": \"2025-06-20 16:51:41\"\n    }\n]"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/user/referral-source": {
+      "put": {
+        "summary": "提交注册渠道",
+        "operationId": "1713",
+        "tags": [
+          "个人设置"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "referralSource": {
+                    "description": "来源渠道",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "referralSourceNote": {
+                    "description": "其他渠道说明，referralSource为other时需提供",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "referralSource"
+                ],
+                "x-apicat-orders": [
+                  "referralSource",
+                  "referralSourceNote"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "description": "提交成功或失败提示",
+                      "type": "string",
+                      "x-apicat-mock": "string"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "x-apicat-orders": [
+                    "message"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/api/websites": {
+      "get": {
+        "summary": "网站列表",
+        "operationId": "1635",
+        "tags": [
+          "网站相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "keywords",
+            "in": "query",
+            "schema": {
+              "description": "搜索关键词",
+              "type": "string",
+              "x-apicat-mock": "name"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "x-apicat-mock": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "properties": {
+                      "description": {
+                        "description": "网站简介",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "id": {
+                        "description": "网站 ID",
+                        "type": "integer",
+                        "x-apicat-mock": "integer"
+                      },
+                      "img": {
+                        "description": "网站 Logo",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "isSubscribed": {
+                        "description": "用户是否已订阅",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "name": {
+                        "description": "网站名称",
+                        "type": "string",
+                        "x-apicat-mock": "name"
+                      },
+                      "sourceType": {
+                        "description": "信息源类型",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      }
+                    },
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "isSubscribed",
+                      "name",
+                      "img",
+                      "description",
+                      "sourceType"
+                    ],
+                    "x-apicat-orders": [
+                      "id",
+                      "isSubscribed",
+                      "name",
+                      "img",
+                      "description",
+                      "sourceType"
+                    ],
+                    "x-apicat-mock": "object"
+                  },
+                  "type": "array",
+                  "x-apicat-mock": "array"
+                },
+                "examples": {
+                  "0": {
+                    "summary": "Success",
+                    "value": "[\n    {\n        \"id\": 42,\n        \"isSubscribed\": false,\n        \"name\": \"歸藏的AI工具箱\",\n        \"img\": \"http://wx.qlogo.cn/mmhead/Q3auHgzwzM6aHg7MdLJm6RMkHHHQfQVBIy2Sia8EFFlMdsyKUOpm3Tg/0\",\n        \"description\": \"产品设计师🎨 AI画图工具操作员🔧 AI课程撰写与信息收集整理📰 致力于发掘借助AI工具改善设计与产品开发流程的各种可能性🤔\",\n        \"sourceType\": \"WEBSITE\"\n    },\n    {\n        \"id\": 108,\n        \"isSubscribed\": false,\n        \"name\": \"果粉俱乐部\",\n        \"img\": \"http://wx.qlogo.cn/mmhead/Q3auHgzwzM7YZLbzaCCMFvAxiaaP4nKg9yrSca34a7ADtenYoTx1qvw/0\",\n        \"description\": \"始于苹果，不止于苹果，分享值得分享的信息，让科技更好的服务生活。\",\n        \"sourceType\": \"WEBSITE\"\n    },\n    {\n        \"id\": 81,\n        \"isSubscribed\": false,\n        \"name\": \"PaperAgent\",\n        \"img\": \"http://wx.qlogo.cn/mmhead/bVy2VQVTWzYFuicgJ9TpdkurRPKI43rjS5BPChxjksiawoBk6G65yVkoOV945VpXJ6WXFNLHuCuWg/0\",\n        \"description\": \"日更，解读AI前沿技术热点Paper\",\n        \"sourceType\": \"WEBSITE\"\n    },\n    {\n        \"id\": 102,\n        \"isSubscribed\": false,\n        \"name\": \"中国企业家杂志\",\n        \"img\": \"http://wx.qlogo.cn/mmhead/Q3auHgzwzM7w21sATPDXupiaVT01lfibXzCT69fN7SFXZHEu2nJorGmg/0\",\n        \"description\": \"讲好企业家故事，弘扬企业家精神\",\n        \"sourceType\": \"WEBSITE\"\n    },\n    {\n        \"id\": 87,\n        \"isSubscribed\": false,\n        \"name\": \"高可用架构\",\n        \"img\": \"http://wx.qlogo.cn/mmhead/Q3auHgzwzM4DkCqSIEoCCu1zKRml7uqGFXL2Phiag9FPlfknIpcCxdw/0\",\n        \"description\": \"高可用架构公众号。\",\n        \"sourceType\": \"WEBSITE\"\n    }\n]"
+                  }
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          },
+          "400": {
+            "$ref": "#/components/responses/ErrorResponse-62"
+          }
+        }
+      }
+    },
+    "/api/websites/submissions": {
+      "post": {
+        "summary": "提交收录网站",
+        "operationId": "1636",
+        "tags": [
+          "网站相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "url": {
+                    "description": "网站链接",
+                    "type": "string",
+                    "x-apicat-mock": "url"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "url"
+                ],
+                "x-apicat-orders": [
+                  "url"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "content": {
+              "none": {}
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/inner-api/mp-articles": {
+      "get": {
+        "summary": "公众号文章搜索",
+        "operationId": "1501",
+        "tags": [
+          "公众号抓取相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "mpId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "公众号 ID(微信官方)",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "articleMsgId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "文章所在的群发消息 ID(微信官方)",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "articleIdx",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "群发图文中的第几篇(微信官方)",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          },
+          {
+            "name": "articleSn",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "description": "文章签名(微信官方)",
+              "type": "string",
+              "x-apicat-mock": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/微信文章(字段最全)-1383"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      },
+      "post": {
+        "summary": "添加公众号文章",
+        "operationId": "1502",
+        "tags": [
+          "公众号抓取相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "articleId": {
+                    "description": "文章 ID(微信官方)",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "articleIdx": {
+                    "description": "群发图文中的第几篇(微信官方)",
+                    "type": "integer",
+                    "x-apicat-mock": "integer"
+                  },
+                  "articleMsgId": {
+                    "description": "文章所在的群发消息 ID(微信官方)",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "articleSn": {
+                    "description": "文章签名(微信官方)",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "coverImage": {
+                    "description": "文章封面图",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "description": {
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "mpId": {
+                    "description": "公众号 ID(微信官方)",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "publishedAt": {
+                    "description": "发布时间戳",
+                    "type": "integer",
+                    "x-apicat-mock": "integer"
+                  },
+                  "title": {
+                    "type": "string",
+                    "x-apicat-mock": "title"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "mpId",
+                  "articleId",
+                  "articleMsgId",
+                  "articleIdx",
+                  "articleSn",
+                  "title",
+                  "coverImage",
+                  "description",
+                  "publishedAt"
+                ],
+                "x-apicat-orders": [
+                  "mpId",
+                  "articleId",
+                  "articleMsgId",
+                  "articleIdx",
+                  "articleSn",
+                  "title",
+                  "coverImage",
+                  "description",
+                  "publishedAt"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "description": "文章 ID(自增 ID)",
+                      "type": "integer",
+                      "x-apicat-mock": "integer"
+                    }
+                  },
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "x-apicat-orders": [
+                    "id"
+                  ],
+                  "x-apicat-mock": "object"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/inner-api/mp-articles/{articleId}": {
+      "get": {
+        "summary": "公众号文章详情",
+        "operationId": "1500",
+        "tags": [
+          "公众号抓取相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "articleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "文章 ID(微信官方)",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/微信文章(字段最全)-1383"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/inner-api/mp-articles/{id}": {
+      "put": {
+        "summary": "更新公众号文章",
+        "operationId": "1503",
+        "tags": [
+          "公众号抓取相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "description": "文章 ID(自增 ID)",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "articleId": {
+                    "description": "文章 ID(微信官方)",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "articleIdx": {
+                    "description": "群发图文中的第几篇(微信官方)",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "articleMsgId": {
+                    "description": "文章所在的群发消息 ID(微信官方)",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "articleSn": {
+                    "description": "文章签名(微信官方)",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "category": {
+                    "description": "文章分类",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "coverImage": {
+                    "description": "文章封面图",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "description": {
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "keywords": {
+                    "description": "文章关键词",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "llmSummary": {
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "llmTitle": {
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "mpId": {
+                    "description": "公众号 ID(微信官方)",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "publishedAt": {
+                    "description": "发布时间戳",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "tags": {
+                    "description": "文章标签",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "title": {
+                    "type": "string",
+                    "x-apicat-mock": "title"
+                  }
+                },
+                "type": "object",
+                "x-apicat-orders": [
+                  "mpId",
+                  "articleId",
+                  "articleMsgId",
+                  "articleIdx",
+                  "articleSn",
+                  "title",
+                  "coverImage",
+                  "description",
+                  "category",
+                  "tags",
+                  "keywords",
+                  "publishedAt",
+                  "llmTitle",
+                  "llmSummary"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "content": {
+              "none": {}
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/inner-api/mps": {
+      "post": {
+        "summary": "添加或更新公众号",
+        "operationId": "1499",
+        "tags": [
+          "公众号抓取相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "alias": {
+                    "description": "公众号别名",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "description": {
+                    "description": "公众号简介",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "img": {
+                    "description": "公众号头像",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "mpId": {
+                    "description": "公众号 ID",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "name": {
+                    "description": "公众号名称",
+                    "type": "string",
+                    "x-apicat-mock": "name"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "mpId",
+                  "alias",
+                  "name",
+                  "img",
+                  "description"
+                ],
+                "x-apicat-orders": [
+                  "mpId",
+                  "alias",
+                  "name",
+                  "img",
+                  "description"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "content": {
+              "none": {}
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/inner-api/mps/names": {
+      "get": {
+        "summary": "获取所有微信公众号名称列表",
+        "operationId": "1498",
+        "tags": [
+          "公众号抓取相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "description": "公众号名称",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "type": "array",
+                  "x-apicat-mock": "array"
+                }
+              }
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    },
+    "/inner-api/untracked-mps": {
+      "post": {
+        "summary": "接收搜索任务推送",
+        "operationId": "1520",
+        "tags": [
+          "未收录公众号搜索相关"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/x-apicat-global-parameters/header-Authorization"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "finished": {
+                    "description": "任务是否完成",
+                    "type": "boolean",
+                    "x-apicat-mock": "boolean"
+                  },
+                  "message": {
+                    "description": "任务消息",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  },
+                  "mp": {
+                    "properties": {
+                      "description": {
+                        "description": "公众号简介",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "img": {
+                        "description": "公众号头像",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "mpId": {
+                        "description": "公众号 ID",
+                        "type": "string",
+                        "x-apicat-mock": "string"
+                      },
+                      "name": {
+                        "description": "公众号名称",
+                        "type": "string",
+                        "x-apicat-mock": "name"
+                      }
+                    },
+                    "type": "object",
+                    "x-apicat-orders": [
+                      "mpId",
+                      "name",
+                      "img",
+                      "description"
+                    ],
+                    "x-apicat-mock": "object"
+                  },
+                  "searchId": {
+                    "description": "搜索任务 ID",
+                    "type": "string",
+                    "x-apicat-mock": "string"
+                  }
+                },
+                "type": "object",
+                "required": [
+                  "searchId",
+                  "finished",
+                  "message",
+                  "mp"
+                ],
+                "x-apicat-orders": [
+                  "searchId",
+                  "finished",
+                  "message",
+                  "mp"
+                ],
+                "x-apicat-mock": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "content": {
+              "none": {}
+            },
+            "description": "",
+            "x-apicat-response-name": "Success"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "订单"
+    },
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "公众号抓取相关"
+    },
+    {
+      "name": "发现"
+    },
+    {
+      "name": "Onboarding"
+    },
+    {
+      "name": "关注点"
+    },
+    {
+      "name": "网站相关"
+    },
+    {
+      "name": "订阅分组"
+    },
+    {
+      "name": "公众号相关"
+    },
+    {
+      "name": "未收录公众号搜索相关"
+    },
+    {
+      "name": "付费相关"
+    },
+    {
+      "name": "会话相关"
+    },
+    {
+      "name": "个人设置"
+    },
+    {
+      "name": "订阅相关"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "@supsub/cli",
+  "version": "0.0.0",
+  "description": "supsub command-line tool",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "supsub": "./src/index.ts"
+  },
+  "scripts": {
+    "dev": "bun run src/index.ts",
+    "start": "bun run src/index.ts",
+    "build": "bun build --compile --target=bun ./src/index.ts --outfile dist/supsub",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "cli-table3": "^0.6.5",
+    "kleur": "^4.1.5"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}

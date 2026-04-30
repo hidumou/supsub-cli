@@ -1,0 +1,23 @@
+schema: openspec/v1
+project:
+  name: supsub-cli
+  description: supsub 命令行工具与配套 Hono mock server（pnpm + Bun + TypeScript monorepo）
+  language: typescript
+  runtime: bun@1
+  package_manager: pnpm@10
+  workspace: true
+conventions:
+  spec_format: spec-driven
+  scenario_language: zh-CN
+  scenario_keywords: [GIVEN, WHEN, THEN]
+  exit_codes:
+    success: 0
+    business_error: 1
+    unauthorized: 2
+    plan_expired: 3
+    network_error: 10
+    server_error: 11
+    invalid_args: 64
+sources_of_truth:
+  prd: docs/PRD.md
+  openapi: api.json

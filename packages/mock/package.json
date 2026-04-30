@@ -1,0 +1,19 @@
+{
+  "name": "@supsub/mock",
+  "version": "0.0.0",
+  "description": "Hono-based mock server for supsub-cli development",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "hono": "^4.6.7"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}
