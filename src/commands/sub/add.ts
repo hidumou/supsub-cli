@@ -21,7 +21,7 @@ export function registerSubAdd(parent: Command): void {
       [] as string[],
     )
     .action(async (opts: { sourceId: string; type: string; group: string[] }) => {
-      const globalOpts = parent.parent!.opts() as { output?: string };
+      const globalOpts = (parent.parent?.opts() ?? {}) as { output?: string };
       const fmt = globalOpts.output;
 
       const sourceType = normalizeType(opts.type);

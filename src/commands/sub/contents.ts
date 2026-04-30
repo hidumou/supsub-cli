@@ -70,7 +70,7 @@ export function registerSubContents(parent: Command): void {
         unread?: boolean;
         page: string;
       }) => {
-        const globalOpts = parent.parent!.opts() as { output?: string };
+        const globalOpts = (parent.parent?.opts() ?? {}) as { output?: string };
         const fmt = globalOpts.output;
 
         // 互斥校验

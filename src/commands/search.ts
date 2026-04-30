@@ -50,15 +50,6 @@ function renderResultItem(item: SearchResultItem): string[] {
   }
 }
 
-function renderSourceRow(s: SourceBasic): string[] {
-  return [
-    sourceKindLabel(s.sourceType),
-    truncate(s.name, 24),
-    shortUrl(s.url),
-    truncate(s.description, 40),
-  ];
-}
-
 export function registerSearch(program: Command): void {
   program
     .command('search <keyword>')

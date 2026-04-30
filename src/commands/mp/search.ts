@@ -76,7 +76,7 @@ export function registerMpSearch(parent: Command): void {
     .command('search <name>')
     .description('搜索公众号')
     .action(async (name: string) => {
-      const fmt = parent.parent!.opts().output as string | undefined;
+      const fmt = (parent.parent?.opts().output ?? undefined) as string | undefined;
       await runSyncSearch(name, fmt);
     });
 }

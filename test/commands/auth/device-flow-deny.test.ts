@@ -13,20 +13,15 @@ const FAKE_DEVICE_CODE_RESPONSE = {
 describe('device-flow - access_denied 立即停止并抛出', () => {
   let callCount: number;
   let originalFetch: typeof globalThis.fetch;
-  let stderrOutput: string;
   let originalStderrWrite: typeof process.stderr.write;
 
   beforeEach(() => {
     callCount = 0;
-    stderrOutput = '';
     originalFetch = globalThis.fetch;
     originalStderrWrite = process.stderr.write.bind(process.stderr);
 
-    // 捕获 stderr 输出，避免测试中打印干扰
-    process.stderr.write = (chunk: string | Uint8Array, ...args: unknown[]) => {
-      stderrOutput += typeof chunk === 'string' ? chunk : new TextDecoder().decode(chunk);
-      return true;
-    };
+    // 静默 stderr 输出，避免测试中打印干扰
+    process.stderr.write = (() => true) as typeof process.stderr.write;
 
     // mock fetch 序列
     globalThis.fetch = async (input: RequestInfo | URL, _init?: RequestInit): Promise<Response> => {

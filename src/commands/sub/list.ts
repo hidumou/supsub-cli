@@ -37,7 +37,7 @@ export function registerSubList(parent: Command): void {
     .description('列出订阅源')
     .option('--type <type>', '过滤类型：MP|WEBSITE')
     .action(async (opts: { type?: string }) => {
-      const globalOpts = parent.parent!.opts() as { output?: string };
+      const globalOpts = (parent.parent?.opts() ?? {}) as { output?: string };
       const fmt = globalOpts.output;
 
       const sourceType = opts.type ? normalizeType(opts.type) : undefined;

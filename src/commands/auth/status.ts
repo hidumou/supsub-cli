@@ -16,7 +16,7 @@ export function registerAuthStatus(parent: Command): void {
     .command('status')
     .description('查看当前登录状态')
     .action(async () => {
-      const globalOpts = parent.parent!.opts() as { output?: string };
+      const globalOpts = (parent.parent?.opts() ?? {}) as { output?: string };
       const fmt = globalOpts.output;
 
       const { key, clientId, source } = await resolveApiKey();

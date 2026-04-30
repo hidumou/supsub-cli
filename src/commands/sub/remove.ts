@@ -12,7 +12,7 @@ export function registerSubRemove(parent: Command): void {
     .requiredOption('--source-id <id>', '信息源 ID')
     .requiredOption('--type <type>', '信息源类型：MP|WEBSITE')
     .action(async (opts: { sourceId: string; type: string }) => {
-      const globalOpts = parent.parent!.opts() as { output?: string };
+      const globalOpts = (parent.parent?.opts() ?? {}) as { output?: string };
       const fmt = globalOpts.output;
 
       const sourceType = normalizeType(opts.type);

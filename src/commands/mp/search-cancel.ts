@@ -10,7 +10,7 @@ export function registerMpSearchCancel(parent: Command): void {
     .command('search-cancel <searchId>')
     .description('取消公众号搜索任务')
     .action(async (searchId: string) => {
-      const fmt = parent.parent!.opts().output as string | undefined;
+      const fmt = (parent.parent?.opts().output ?? undefined) as string | undefined;
 
       try {
         await cancelSearchTask(searchId);
