@@ -69,7 +69,7 @@ describe.skipIf(SKIP)('e2e/prod-bearer - 正式环境 bearer_token 鉴权', () =
   });
 
   test('GET /api/search 返回 SearchResponse 结构（results）', async () => {
-    const r = await searchAll({ type: 'ALL', keywords: 'openai', page: 1 });
+    const r = await searchAll({ type: 'ALL', keywords: 'openai' });
     expect(Array.isArray(r.results)).toBe(true);
     // results 内每项必须有 type 字段且为 SOURCE/CONTENT
     for (const item of r.results) {

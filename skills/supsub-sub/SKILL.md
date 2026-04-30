@@ -97,7 +97,7 @@ JSON shape: `{"success":true,"data":{"message":"..."}}`
 ### Browse articles in a subscription
 
 ```
-supsub sub contents --source-id <id> --type <MP|WEBSITE> [--unread | --all] [--page <n>]
+supsub sub contents --source-id <id> --type <MP|WEBSITE> [--unread | --all]
 ```
 
 | Flag | Default | Description |
@@ -106,24 +106,20 @@ supsub sub contents --source-id <id> --type <MP|WEBSITE> [--unread | --all] [--p
 | `--type` | required | `MP` 或 `WEBSITE` |
 | `--unread` | (default) | 仅返回未读文章 |
 | `--all` | — | 返回全部文章（已读 + 未读） |
-| `--page` | `1` | 页码（每页 20 条） |
 
 > ⚠️ `--unread` 与 `--all` **互斥**：同时指定会抛 `INVALID_ARGS`。不传任何一个时，默认行为等价于 `--unread`。
 
 每行字段：`articleId`, `url`, `title`, `coverImage`, `tags[]`, `summary`, `publishedAt`, `isRead`。
 
 ```bash
-# 默认（未读，第 1 页）
+# 默认（未读）
 supsub sub contents --source-id 12345 --type MP
 
 # 全部文章（含已读）
 supsub sub contents --source-id 12345 --type MP --all
 
-# 翻页
-supsub sub contents --source-id 12345 --type MP --page 2
-
-# 第 2 页所有文章 + JSON
-supsub sub contents --source-id 12345 --type MP --all --page 2 -o json
+# 全部文章 + JSON
+supsub sub contents --source-id 12345 --type MP --all -o json
 ```
 
 JSON shape: `{"success":true,"data":[{"articleId":"...","url":"...","title":"...","coverImage":"...","tags":[...],"summary":"...","publishedAt":<timestamp 或字符串>,"isRead":false}, ...]}`
@@ -139,5 +135,5 @@ JSON shape: `{"success":true,"data":[{"articleId":"...","url":"...","title":"...
 - `--type` 取值是 `MP` 或 `WEBSITE`（CLI 内部会 `toUpperCase`）；常见错误是写成 `mp` 大小写虽允许，但写 `mp_account` / `wechat` / `rss` 会报 `INVALID_ARGS`。
 - 添加订阅前要先确认 `sourceId`：公众号通过 `supsub mp search <name>` 获得 `mpId`，订阅源 / 文章可通过 `supsub search <keyword>` 搜出来。
 - `sub contents` 默认只看未读 —— 如果用户问"这个公众号有哪些文章"通常意味着 `--all`。
-- 列表是分页的（每页 20 条）；如果用户要全部历史，需要循环 `--page` 直到返回空数组。
+- `sub contents` 一次最多返回 20 条文章（后端默认 `pageSize=20`），CLI 不支持翻页；想看更早的历史目前没有 CLI 命令可达。
 - Exit codes：`0` OK，`2` UNAUTHORIZED，`64` INVALID_ARGS（`--type` / `--source-id` / `--group` 校验失败、`--all` 与 `--unread` 互斥），其他网络/服务端错误 `10` / `11`。

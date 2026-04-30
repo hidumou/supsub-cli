@@ -34,9 +34,9 @@ function shortUrl(url: string): string {
   }
 }
 
-function renderArticleTable(data: Article[], page: number): void {
+function renderArticleTable(data: Article[]): void {
   if (data.length === 0) {
-    process.stdout.write(`(empty, page ${page})\n`);
+    process.stdout.write('(empty)\n');
     return;
   }
   printTable({
@@ -50,7 +50,7 @@ function renderArticleTable(data: Article[], page: number): void {
     ]),
     columnWidths: [18, 8, 42, 20, 42],
   });
-  process.stdout.write(`(${data.length} items, page ${page})\n`);
+  process.stdout.write(`(${data.length} items)\n`);
 }
 
 export function registerSubContents(parent: Command): void {
@@ -61,14 +61,12 @@ export function registerSubContents(parent: Command): void {
     .requiredOption('--type <type>', '信息源类型：MP|WEBSITE')
     .option('--all', '显示全部文章')
     .option('--unread', '仅显示未读（默认）')
-    .option('--page <n>', '页码', '1')
     .action(
       async (opts: {
         sourceId: string;
         type: string;
         all?: boolean;
         unread?: boolean;
-        page: string;
       }) => {
         const globalOpts = (parent.parent?.opts() ?? {}) as { output?: string };
         const fmt = globalOpts.output;
@@ -82,17 +80,15 @@ export function registerSubContents(parent: Command): void {
 
         const sourceType = normalizeType(opts.type);
         const sourceId = parseSourceId(opts.sourceId);
-        const page = parseInt(opts.page, 10) || 1;
         const contentType = opts.all ? 'all' : 'unread';
 
         const data = await getContents({
           sourceType,
           sourceId,
           type: contentType,
-          page,
         });
 
-        output(data, fmt, (d) => renderArticleTable(d, page));
+        output(data, fmt, renderArticleTable);
       },
     );
 }

@@ -63,7 +63,7 @@ async function runSyncSearch(name: string, fmt: string | undefined): Promise<voi
   dieWith(
     {
       code: 'MP_SEARCH_TIMEOUT',
-      message: `30 秒内未完成，可继续查询: supsub task ${searchId}`,
+      message: `30 秒内未完成，可重试 supsub mp search 或取消任务: supsub mp search-cancel ${searchId}`,
       status: 0,
       data: { searchId },
     },

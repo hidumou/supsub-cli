@@ -55,8 +55,7 @@ export function registerSearch(program: Command): void {
     .command('search <keyword>')
     .description('全量搜索（源 + 内容）')
     .option('--type <type>', '搜索类型：ALL|MP|WEBSITE|CONTENT', 'ALL')
-    .option('--page <n>', '页码', '1')
-    .action(async (keyword: string, opts: { type: string; page: string }) => {
+    .action(async (keyword: string, opts: { type: string }) => {
       const globalOpts = program.opts() as { output?: string };
       const fmt = globalOpts.output;
 
@@ -69,12 +68,9 @@ export function registerSearch(program: Command): void {
         } satisfies ErrorEnvelope;
       }
 
-      const page = parseInt(opts.page, 10) || 1;
-
       const data = await searchAll({
         type: typeVal as 'ALL' | 'MP' | 'WEBSITE' | 'CONTENT',
         keywords: keyword,
-        page,
       });
 
       output(data, fmt, (d) => {
@@ -82,9 +78,9 @@ export function registerSearch(program: Command): void {
 
         // Results 表
         if (results.length === 0) {
-          process.stdout.write(`Results (0 items, page ${page})\n(empty)\n`);
+          process.stdout.write('Results (0 items)\n(empty)\n');
         } else {
-          process.stdout.write(`Results (${results.length} items, page ${page})\n`);
+          process.stdout.write(`Results (${results.length} items)\n`);
           printTable({
             headers: ['类型', 'id', 'name/title', 'url', 'summary'],
             rows: results.map(renderResultItem),

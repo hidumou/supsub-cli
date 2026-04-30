@@ -43,9 +43,9 @@ JSON shape (成功)：`{"success":true,"data":[{"mpId":"...","name":"...","img":
 
 **未找到**：以 `MP_NOT_FOUND` 错误退出（非 0 exit code）。
 
-**超时**：以 `MP_SEARCH_TIMEOUT` 错误退出，错误体里带 `data.searchId`，提示信息形如 `30 秒内未完成，可继续查询: supsub task <searchId>`。
+**超时**：以 `MP_SEARCH_TIMEOUT` 错误退出，错误体里带 `data.searchId`，提示信息形如 `30 秒内未完成，可重试 supsub mp search 或取消任务: supsub mp search-cancel <searchId>`。
 
-> ⚠️ **注意**：当前版本（0.x）CLI **没有实现 `supsub task <searchId>` 命令**，只有 `supsub mp search-cancel <searchId>` 可用。如果用户遇到超时，可以选择重新跑 `supsub mp search <name>`、或调用 `supsub mp search-cancel <searchId>` 取消那个孤儿任务后再试。这个不一致是 README 与代码之间的已知 gap。
+> ⚠️ **超时处理**：CLI 不提供恢复型查询命令。遇到超时时，用户只有两条路径 —— 重新跑 `supsub mp search <name>`，或调用 `supsub mp search-cancel <searchId>` 取消那个孤儿任务后再试。
 
 ---
 
@@ -82,5 +82,5 @@ JSON shape: `{"success":true,"data":{"message":"已取消"}}`
 - ⚠️ `mpId` 是字符串（`Mp.mpId: string`），但 `supsub sub add --source-id` 期望正整数。如果后端 `mpId` 实际是数值字符串，可以直接传；如果不是数值，订阅会报 `INVALID_ARGS`。优先在 `--source-id` 之前确认是数字。
 - `mp search` 内部固定轮询：间隔 2s，总时长 30s（`POLL_INTERVAL_MS` / `POLL_MAX_MS`），CLI 不暴露调参 flag。
 - 后端按"流式"返回候选公众号：CLI 已经做去重（按 `mpId`），调用方不用再去重。
-- 关于 `supsub task <searchId>`：**README 提到、超时错误信息也提到，但 0.x 版本未实现**（`src/cli/index.ts` 没有注册 task 命令）。Agent 不要尝试调用 `supsub task` —— 会得到 commander "unknown command" 错误。
+- 超时分支的合法后续动作只有：`supsub mp search-cancel <searchId>` 取消孤儿任务，或重新发起 `supsub mp search <name>`。
 - Exit codes：`0` OK；超时 / 未找到 / 任务不存在等业务错误是非 0；`2` UNAUTHORIZED，`10`/`11` 网络/服务端。

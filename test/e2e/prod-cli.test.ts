@@ -228,12 +228,11 @@ describe.skipIf(SKIP)('e2e/prod-cli - 通过子进程驱动 CLI 打正式环境'
     expect(r.stdout).toContain('search-cancel');
   });
 
-  test('查看全局搜索帮助：包含 keyword/--type/--page', async () => {
+  test('查看全局搜索帮助：包含 keyword/--type', async () => {
     const r = await runCli(['search', '--help'], { tmpHome });
     expect(r.code).toBe(0);
     expect(r.stdout).toContain('keyword');
     expect(r.stdout).toContain('--type');
-    expect(r.stdout).toContain('--page');
   });
 
   // ─── table 模式输出（默认） ─────────────────────────────────
@@ -351,17 +350,6 @@ describe.skipIf(SKIP)('e2e/prod-cli - 通过子进程驱动 CLI 打正式环境'
     for (const item of body.data.results) {
       expect(item.type).toBe('CONTENT');
     }
-  });
-
-  test('全局搜索翻第二页：依然返回合法 results 数组（可能为空）', async () => {
-    const r = await runCli(['--output', 'json', 'search', 'openai', '--page', '2'], {
-      tmpHome,
-      withAuth: true,
-    });
-    expect(r.code).toBe(0);
-    const body = JSON.parse(r.stdout);
-    expect(body.success).toBe(true);
-    expect(Array.isArray(body.data.results)).toBe(true);
   });
 
   test('全局搜索没填关键词：commander 报错退出', async () => {

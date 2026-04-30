@@ -18,13 +18,12 @@ description: Full-text search across subscription sources and articles via the S
 ### Search
 
 ```
-supsub search <keyword> [--type <ALL|MP|WEBSITE|CONTENT>] [--page <n>]
+supsub search <keyword> [--type <ALL|MP|WEBSITE|CONTENT>]
 ```
 
 | Flag | Default | Description |
 |------|---------|-------------|
 | `--type` | `ALL` | 搜索范围：`ALL`（源 + 文章）/ `MP`（公众号源）/ `WEBSITE`（网站源）/ `CONTENT`（文章正文） |
-| `--page` | `1` | 页码（默认每页 10 条） |
 
 `<keyword>` 是位置参数，可以是中文或英文，建议用引号包起来避免 shell 拆分。
 
@@ -40,9 +39,6 @@ supsub search "hacker news" --type WEBSITE
 
 # 只搜文章正文
 supsub search "向量数据库" --type CONTENT
-
-# 翻页
-supsub search "RAG" --page 2
 
 # JSON
 supsub search "MCP 协议" -o json
@@ -71,5 +67,5 @@ JSON shape: `{"success":true,"data":{"results":[...],"recommendations":[...],"pr
 - 搜索 + 订阅典型链路：`supsub search "<词>" --type MP -o json` → 取 `data.results[].data.sourceId` → `supsub sub add --source-id <id> --type MP`（参考 `supsub-sub` skill）。
 - 搜文章拿全文：`supsub search "<词>" --type CONTENT -o json` 拿到 `contentId` 与 `sourceId`，目前 CLI 没有"按 contentId 取文章详情"命令，需要通过 `supsub sub contents --source-id <id> --type <T>` 在该源内浏览。
 - `data.results[].data.isSubscribed` 字段可以判断当前结果是否已经订阅，避免重复 `sub add`。
-- 翻页：`--page` 从 1 开始；后端默认 `pageSize=10`，CLI 不暴露 `--page-size`。
+- CLI 一次最多返回 10 条结果（后端默认 `pageSize=10`），不支持翻页；如果想要更多结果，调整关键词缩小或扩大搜索范围。
 - Exit codes：`0` OK，`2` UNAUTHORIZED，`64` INVALID_ARGS（`--type` 不在白名单时），`10`/`11` 网络/服务端错误。

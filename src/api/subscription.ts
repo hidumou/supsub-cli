@@ -43,8 +43,6 @@ export async function getContents(params: {
   sourceType: SourceType;
   sourceId: number;
   type: 'all' | 'unread';
-  page: number;
-  pageSize?: number;
 }): Promise<Article[]> {
   return request<Article[]>({
     method: 'GET',
@@ -53,8 +51,8 @@ export async function getContents(params: {
       sourceType: params.sourceType,
       sourceId: params.sourceId,
       type: params.type,
-      page: params.page,
-      pageSize: params.pageSize ?? 20,
+      page: 1,
+      pageSize: 20,
     },
   });
 }
