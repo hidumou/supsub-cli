@@ -1,0 +1,130 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build binaries
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - target_os: darwin
+            target_arch: x64
+            archive_os: darwin
+            archive_arch: amd64
+            name: supsub-cli_darwin_amd64
+          - target_os: darwin
+            target_arch: arm64
+            archive_os: darwin
+            archive_arch: arm64
+            name: supsub-cli_darwin_arm64
+          - target_os: linux
+            target_arch: x64
+            archive_os: linux
+            archive_arch: amd64
+            name: supsub-cli_linux_amd64
+          - target_os: linux
+            target_arch: arm64
+            archive_os: linux
+            archive_arch: arm64
+            name: supsub-cli_linux_arm64
+          - target_os: windows
+            target_arch: x64
+            archive_os: windows
+            archive_arch: amd64
+            name: supsub-cli_windows_amd64.exe
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        env:
+          TARGET_OS: ${{ matrix.target_os }}
+          TARGET_ARCH: ${{ matrix.target_arch }}
+        run: |
+          VERSION=${GITHUB_REF_NAME}
+          VERSION_NUM=${VERSION#v}
+          if [ "${{ matrix.target_os }}" = "windows" ]; then
+            BINARY_NAME="supsub.exe"
+            EXE_SUFFIX=".exe"
+          else
+            BINARY_NAME="supsub"
+            EXE_SUFFIX=""
+          fi
+          bun build --compile --target=bun-${TARGET_OS}-${TARGET_ARCH} ./src/index.ts --outfile "supsub${EXE_SUFFIX}"
+          if [ "${{ matrix.target_os }}" = "windows" ]; then
+            zip "supsub-cli_${VERSION_NUM}_${{ matrix.archive_os }}_${{ matrix.archive_arch }}.zip" "${BINARY_NAME}"
+          else
+            tar -czf "supsub-cli_${VERSION_NUM}_${{ matrix.archive_os }}_${{ matrix.archive_arch }}.tar.gz" "${BINARY_NAME}"
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: |
+            supsub-cli_*_${{ matrix.archive_os }}_${{ matrix.archive_arch }}.tar.gz
+            supsub-cli_*_${{ matrix.archive_os }}_${{ matrix.archive_arch }}.zip
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true
+
+  publish-npm:
+    name: Publish to npm
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Update package version
+        run: |
+          VERSION=${GITHUB_REF_NAME#v}
+          CURRENT=$(node -p "require('./package.json').version")
+          if [ "$VERSION" != "$CURRENT" ]; then
+            npm version $VERSION --no-git-tag-version
+          fi
+
+      - name: Publish
+        run: |
+          npm config set //registry.npmjs.org/:_authToken "$NPM_TOKEN"
+          npm config set @supsub:registry https://registry.npmjs.org/
+          npm publish --access public
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -1,11 +1,38 @@
 {
-  "name": "supsub-cli",
-  "version": "0.0.0",
+  "name": "@supsub/cli",
+  "version": "0.1.0",
   "description": "supsub command-line tool",
   "type": "module",
-  "private": true,
+  "homepage": "https://github.com/hidumou/supsub-cli",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hidumou/supsub-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/hidumou/supsub-cli/issues"
+  },
+  "license": "MIT",
+  "author": "dumou",
+  "keywords": [
+    "supsub",
+    "cli",
+    "subscription",
+    "rss",
+    "wechat",
+    "mp"
+  ],
   "bin": {
-    "supsub": "./src/index.ts"
+    "supsub": "./bin/supsub"
+  },
+  "files": [
+    "bin/",
+    "scripts/",
+    "skills/",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "engines": {
     "node": ">=20"
@@ -18,7 +45,8 @@
     "test": "bun test",
     "lint": "biome check src test",
     "lint:fix": "biome check --write src test",
-    "format": "biome format --write src test"
+    "format": "biome format --write src test",
+    "postinstall": "node scripts/postinstall.cjs"
   },
   "dependencies": {
     "cli-table3": "^0.6.5",

@@ -1,0 +1,86 @@
+---
+name: supsub-mp
+version: 0.1.0
+description: Search and manage WeChat 公众号 (MP) async tasks via the SupSub CLI
+---
+
+# supsub-mp Skill
+
+搜索微信公众号（异步任务，CLI 默认同步等待最长 30 秒），以及取消正在执行的搜索任务。拿到 `mpId` 后通常下一步是 `supsub sub add --source-id <mpId> --type MP`（见 `supsub-sub` skill）。
+
+## Prerequisites
+
+- 安装：`pnpm add -g @supsub/cli`（或 `npm i -g @supsub/cli`）
+- 已登录：`supsub auth status` 显示 Authenticated（首次使用先 `supsub auth login`）
+
+## Commands
+
+### Search 公众号 (async, auto-poll)
+
+```
+supsub mp search <name>
+```
+
+`<name>` 是公众号名称关键词（建议加引号）。命令内部流程：
+
+1. `POST /api/mps/search-tasks` 创建异步任务，得到 `searchId`。
+2. CLI 每 2s 轮询一次任务状态，**最多 30 秒**。
+3. 后端会在多次轮询里 **逐条** 返回候选公众号，CLI 自动累计去重。
+4. 收到 `finished=true` 后，把所有候选作为结果一次性输出。
+5. 30 秒未完成 → 退出并返回 `searchId`，附带提示信息。
+
+每个候选字段：`mpId`, `name`, `img`, `description`。
+
+```bash
+# 同步搜索（最长等 30 秒）
+supsub mp search "阮一峰的网络日志"
+
+# JSON
+supsub mp search "阮一峰" -o json
+```
+
+JSON shape (成功)：`{"success":true,"data":[{"mpId":"...","name":"...","img":"...","description":"..."}, ...]}`
+
+**未找到**：以 `MP_NOT_FOUND` 错误退出（非 0 exit code）。
+
+**超时**：以 `MP_SEARCH_TIMEOUT` 错误退出，错误体里带 `data.searchId`，提示信息形如 `30 秒内未完成，可继续查询: supsub task <searchId>`。
+
+> ⚠️ **注意**：当前版本（0.x）CLI **没有实现 `supsub task <searchId>` 命令**，只有 `supsub mp search-cancel <searchId>` 可用。如果用户遇到超时，可以选择重新跑 `supsub mp search <name>`、或调用 `supsub mp search-cancel <searchId>` 取消那个孤儿任务后再试。这个不一致是 README 与代码之间的已知 gap。
+
+---
+
+### Cancel a running search task
+
+```
+supsub mp search-cancel <searchId>
+```
+
+`<searchId>` 来自上一次 `supsub mp search` 在超时分支返回的错误数据（JSON 模式：`{"success":false,"error":{"code":"MP_SEARCH_TIMEOUT","data":{"searchId":"..."}}}` 这一类的形态由 `dieWith` 和 `output()` 处理；表格模式下错误字符串里会直接带 `searchId`）。
+
+```bash
+supsub mp search-cancel sid_abc123
+supsub mp search-cancel sid_abc123 -o json
+```
+
+JSON shape: `{"success":true,"data":{"message":"已取消"}}`
+
+任务不存在或已取消时，以 `TASK_NOT_FOUND` 错误退出（HTTP 404 → exit code 非 0）。
+
+---
+
+## Agent Usage Notes
+
+- `mp search` 是 **同步包装的异步任务**：调用方一般不用关心 `searchId`，直接拿结果数组即可；只在 30 秒超时分支才需要处理 `searchId`。
+- 解析结果统一用 `-o json`。成功时 `data` 是 `Mp[]`；失败时走标准 `ErrorEnvelope`（`code`、`message`、可选 `data.searchId`）。
+- 搜索 → 订阅链路（最常见）：
+  ```bash
+  # 1. 拿到 mpId
+  mpId=$(supsub mp search "阮一峰" -o json | jq -r '.data[0].mpId')
+  # 2. 订阅
+  supsub sub add --source-id "$mpId" --type MP
+  ```
+- ⚠️ `mpId` 是字符串（`Mp.mpId: string`），但 `supsub sub add --source-id` 期望正整数。如果后端 `mpId` 实际是数值字符串，可以直接传；如果不是数值，订阅会报 `INVALID_ARGS`。优先在 `--source-id` 之前确认是数字。
+- `mp search` 内部固定轮询：间隔 2s，总时长 30s（`POLL_INTERVAL_MS` / `POLL_MAX_MS`），CLI 不暴露调参 flag。
+- 后端按"流式"返回候选公众号：CLI 已经做去重（按 `mpId`），调用方不用再去重。
+- 关于 `supsub task <searchId>`：**README 提到、超时错误信息也提到，但 0.x 版本未实现**（`src/cli/index.ts` 没有注册 task 命令）。Agent 不要尝试调用 `supsub task` —— 会得到 commander "unknown command" 错误。
+- Exit codes：`0` OK；超时 / 未找到 / 任务不存在等业务错误是非 0；`2` UNAUTHORIZED，`10`/`11` 网络/服务端。
