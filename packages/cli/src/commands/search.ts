@@ -33,6 +33,7 @@ function renderResultItem(item: SearchResultItem): string[] {
     const d = item.data as SourceBasic;
     return [
       resultKindLabel(item),
+      String(d.sourceId),
       truncate(d.name, 24),
       shortUrl(d.url),
       truncate(d.description, 40),
@@ -41,6 +42,7 @@ function renderResultItem(item: SearchResultItem): string[] {
     const d = item.data;
     return [
       resultKindLabel(item),
+      `contentId: ${d.contentId}\nsourceId: ${d.sourceId}`,
       truncate(d.title, 24),
       shortUrl(d.url),
       truncate(d.summary, 40),
@@ -93,9 +95,9 @@ export function registerSearch(program: Command): void {
         } else {
           process.stdout.write(`Results (${results.length} items, page ${page})\n`);
           printTable({
-            headers: ["类型", "name/title", "url", "summary"],
+            headers: ["类型", "id", "name/title", "url", "summary"],
             rows: results.map(renderResultItem),
-            columnWidths: [10, 26, 42, 42],
+            columnWidths: [10, 34, 26, 42, 42],
           });
         }
       });

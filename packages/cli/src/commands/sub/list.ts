@@ -19,15 +19,14 @@ function renderSubscriptionTable(data: Subscription[]): void {
     return;
   }
   printTable({
-    headers: ["sourceId", "类型", "name", "unread", "description"],
+    headers: ["sourceId", "类型", "name", "description"],
     rows: data.map((s) => [
       s.sourceId,
       sourceKindLabel(s.sourceType),
       truncate(s.name, 24),
-      s.unreadCount,
       truncate(s.description, 40),
     ]),
-    columnWidths: [14, 10, 26, 10, 42],
+    columnWidths: [14, 10, 26, 42],
   });
   process.stdout.write(`(${data.length} items)\n`);
 }
