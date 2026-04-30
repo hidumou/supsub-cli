@@ -38,7 +38,7 @@ describe("config/store - readConfig / writeConfig / clearAuth", () => {
   });
 
   test("1.2.a writeConfig 写入后 readConfig 可取回", async () => {
-    const { writeConfig, readConfig } = await import("../src/config/store.ts");
+    const { writeConfig, readConfig } = await import("../../src/config/store.ts");
 
     await writeConfig({ api_key: "sk_test_unit" });
     const config = await readConfig();
@@ -46,7 +46,7 @@ describe("config/store - readConfig / writeConfig / clearAuth", () => {
   });
 
   test("1.2.b writeConfig patch 合并保留旧字段", async () => {
-    const { writeConfig, readConfig } = await import("../src/config/store.ts");
+    const { writeConfig, readConfig } = await import("../../src/config/store.ts");
 
     // 先写 api_key
     await writeConfig({ api_key: "k1_unit" });
@@ -58,7 +58,7 @@ describe("config/store - readConfig / writeConfig / clearAuth", () => {
   });
 
   test("1.2.c clearAuth 仅移除认证字段", async () => {
-    const { writeConfig, readConfig, clearAuth } = await import("../src/config/store.ts");
+    const { writeConfig, readConfig, clearAuth } = await import("../../src/config/store.ts");
 
     await writeConfig({ api_key: "k_unit", client_id: "c_unit" });
     await clearAuth();

@@ -35,7 +35,7 @@ describe("resolveApiKey - bearer_token 第三种鉴权来源", () => {
     originalEnvKey = process.env["SUPSUB_API_KEY"];
     delete process.env["SUPSUB_API_KEY"];
     // 清空 CLI flag 覆写，确保每个用例从干净状态开始
-    const { setCliApiKey } = await import("../src/http/credentials.ts");
+    const { setCliApiKey } = await import("../../src/http/credentials.ts");
     setCliApiKey(undefined);
   });
 
@@ -45,14 +45,14 @@ describe("resolveApiKey - bearer_token 第三种鉴权来源", () => {
     } else {
       process.env["SUPSUB_API_KEY"] = originalEnvKey;
     }
-    const { setCliApiKey } = await import("../src/http/credentials.ts");
+    const { setCliApiKey } = await import("../../src/http/credentials.ts");
     setCliApiKey(undefined);
     await cleanupAuthFields();
   });
 
   test("仅 bearer_token 时被识别为 session 来源", async () => {
-    const { writeConfig } = await import("../src/config/store.ts");
-    const { resolveApiKey } = await import("../src/http/credentials.ts");
+    const { writeConfig } = await import("../../src/config/store.ts");
+    const { resolveApiKey } = await import("../../src/http/credentials.ts");
 
     await writeConfig({ bearer_token: "abc.def.ghi", client_id: "supsub-cli" });
 
@@ -63,8 +63,8 @@ describe("resolveApiKey - bearer_token 第三种鉴权来源", () => {
   });
 
   test("api_key 与 bearer_token 共存时 api_key 胜出", async () => {
-    const { writeConfig } = await import("../src/config/store.ts");
-    const { resolveApiKey } = await import("../src/http/credentials.ts");
+    const { writeConfig } = await import("../../src/config/store.ts");
+    const { resolveApiKey } = await import("../../src/http/credentials.ts");
 
     await writeConfig({
       api_key: "sk_live_xxx",
@@ -78,8 +78,8 @@ describe("resolveApiKey - bearer_token 第三种鉴权来源", () => {
   });
 
   test("env SUPSUB_API_KEY 与 bearer_token 共存时 env 胜出", async () => {
-    const { writeConfig } = await import("../src/config/store.ts");
-    const { resolveApiKey } = await import("../src/http/credentials.ts");
+    const { writeConfig } = await import("../../src/config/store.ts");
+    const { resolveApiKey } = await import("../../src/http/credentials.ts");
 
     await writeConfig({ bearer_token: "browser_token", client_id: "supsub-cli" });
     process.env["SUPSUB_API_KEY"] = "env_key";
@@ -90,8 +90,8 @@ describe("resolveApiKey - bearer_token 第三种鉴权来源", () => {
   });
 
   test("--api-key flag 始终最高优先级", async () => {
-    const { writeConfig } = await import("../src/config/store.ts");
-    const { resolveApiKey, setCliApiKey } = await import("../src/http/credentials.ts");
+    const { writeConfig } = await import("../../src/config/store.ts");
+    const { resolveApiKey, setCliApiKey } = await import("../../src/http/credentials.ts");
 
     await writeConfig({
       api_key: "sk_live_xxx",
@@ -107,7 +107,7 @@ describe("resolveApiKey - bearer_token 第三种鉴权来源", () => {
 
   test("clearAuth 同时清除 bearer_token", async () => {
     const { writeConfig, readConfig, clearAuth } = await import(
-      "../src/config/store.ts"
+      "../../src/config/store.ts"
     );
 
     await writeConfig({
@@ -124,7 +124,7 @@ describe("resolveApiKey - bearer_token 第三种鉴权来源", () => {
   });
 
   test("无任何凭证时 source 为 undefined", async () => {
-    const { resolveApiKey } = await import("../src/http/credentials.ts");
+    const { resolveApiKey } = await import("../../src/http/credentials.ts");
 
     // 确保 config 没有认证字段
     await cleanupAuthFields();
