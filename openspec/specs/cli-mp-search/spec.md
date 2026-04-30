@@ -5,13 +5,19 @@ TBD - created by archiving change add-cli-source-search. Update Purpose after ar
 ## Requirements
 ### Requirement: 同步模式 30 秒上限轮询
 
-`supsub mp search <name>` SHALL 先 `POST /api/mps/search-tasks` 拿 `searchId`，按 2 秒间隔轮询 `GET /api/mps/search-tasks/:searchId`，最多轮询 15 次（30 秒上限）。轮询期间 stdout MUST 静默；最终结果或超时时一次性输出。超时后 MUST 通过 `supsub task <searchId>` 走带外查询，CLI 不提供异步立即返回模式。
+`supsub mp search <name>` SHALL 先 `POST /api/mps/search-tasks` 拿 `searchId`，按 2 秒间隔轮询 `GET /api/mps/search-tasks/:searchId`，最多轮询 15 次（30 秒上限）。轮询期间 stdout MUST 静默；最终结果或超时时一次性输出。轮询过程中累积去重所有候选公众号，finished 时 MUST 一次性返回**全部命中结果**（数组形式，不做"取第一个/精确匹配"裁剪）。超时后 MUST 通过 `supsub task <searchId>` 走带外查询，CLI 不提供异步立即返回模式。
 
 #### Scenario: 命中关键词 finished 在 ≤7 秒
 
 - **GIVEN** mock fixture 含 `晚点 LatePost`
 - **WHEN** 执行 `time supsub mp search 晚点 -o json`
-- **THEN** ≤7 秒内退出码 0，stdout 输出 `{"success":true,"data":{"mpId":"999","name":"晚点 LatePost",...}}`，轮询期间 stdout 无任何其他字节
+- **THEN** ≤7 秒内退出码 0，stdout 输出 `{"success":true,"data":[{"mpId":"999","name":"晚点 LatePost",...}]}`（`data` 为数组），轮询期间 stdout 无任何其他字节
+
+#### Scenario: 多个候选全部返回
+
+- **GIVEN** 后端在多次轮询中陆续返回多个匹配的公众号候选
+- **WHEN** 执行 `supsub mp search <关键词> -o json`
+- **THEN** 退出码 0，`data` 为按出现顺序去重后的全部候选数组，不因首次出现精确匹配而提前结束
 
 #### Scenario: 未命中
 
