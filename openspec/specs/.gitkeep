@@ -1,4 +1,0 @@
-# 真相态 spec 目录
-
-change 完成并 archive 后，对应的 capability spec 会从 changes/<name>/specs/<capability>/spec.md 合并进本目录的 specs/<capability>/spec.md。
-首次迭代尚未 archive，本目录暂为占位。

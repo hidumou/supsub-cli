@@ -1,7 +1,0 @@
-schema: spec-driven
-created: 2026-04-28
-owner: cli-dev
-status: pending
-depends_on:
-  - add-cli-auth-device-flow
-  - add-mock-backend-fixtures

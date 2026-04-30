@@ -1,23 +1,34 @@
 {
-  "name": "supsub-cli-workspace",
+  "name": "supsub-cli",
   "version": "0.0.0",
+  "description": "supsub command-line tool",
+  "type": "module",
   "private": true,
-  "description": "supsub-cli monorepo (cli + hono mock server)",
-  "packageManager": "pnpm@10.29.2",
+  "bin": {
+    "supsub": "./src/index.ts"
+  },
   "engines": {
-    "node": ">=20",
-    "pnpm": ">=10"
+    "node": ">=20"
   },
   "scripts": {
-    "dev:cli": "pnpm --filter @supsub/cli dev",
-    "dev:mock": "pnpm --filter @supsub/mock dev",
-    "build:cli": "pnpm --filter @supsub/cli build",
-    "typecheck": "pnpm -r typecheck",
-    "lint": "pnpm -r lint",
-    "test": "pnpm -r test"
+    "dev": "bun run src/index.ts",
+    "start": "bun run src/index.ts",
+    "build": "bun build --compile --target=bun ./src/index.ts --outfile dist/supsub",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "lint": "biome check src test",
+    "lint:fix": "biome check --write src test",
+    "format": "biome format --write src test"
+  },
+  "dependencies": {
+    "cli-table3": "^0.6.5",
+    "commander": "^12.1.0",
+    "kleur": "^4.1.5"
   },
   "devDependencies": {
-    "typescript": "^5.6.3",
-    "@types/node": "^22.7.5"
+    "@biomejs/biome": "2.4.13",
+    "@types/node": "^22.7.5",
+    "bun-types": "latest",
+    "typescript": "^5.6.3"
   }
 }
