@@ -13,7 +13,6 @@ import { registerSubList } from "../commands/sub/list.ts";
 import { registerSubAdd } from "../commands/sub/add.ts";
 import { registerSubRemove } from "../commands/sub/remove.ts";
 import { registerSubContents } from "../commands/sub/contents.ts";
-import { registerSubMarkRead } from "../commands/sub/mark-read.ts";
 
 // Search command
 import { registerSearch } from "../commands/search.ts";
@@ -66,7 +65,6 @@ export async function run(): Promise<void> {
   registerSubAdd(sub);
   registerSubRemove(sub);
   registerSubContents(sub);
-  registerSubMarkRead(sub);
 
   // ─── search 命令 ──────────────────────────────────────────
   registerSearch(program);
