@@ -1,8 +1,6 @@
 # SupSub CLI
 
-SupSub 的命令行工具，让你在终端里直接管理订阅源、搜索内容、追踪公众号。
-
-订公众号、订网站、搜文章、查动态——一条命令搞定，并且每条命令都支持 `-o json` 输出，便于在脚本里做后续处理。
+SupSub 的命令行工具，让你在终端里直接管理订阅源、搜索内容、追踪公众号、网站。
 
 ---
 
@@ -14,7 +12,7 @@ pnpm add -g @supsub/cli
 npm i -g @supsub/cli
 ```
 
-安装时会自动从 GitHub Release 下载对应平台（macOS / Linux / Windows，x64 / arm64）的预编译二进制，装好就能 `supsub --help`。
+支持 macOS / Linux / Windows（x64 / arm64）。
 
 ---
 
@@ -152,45 +150,44 @@ supsub mp search-cancel <searchId>  取消正在执行的搜索任务
 
 | 参数 | 说明 |
 |------|------|
-| `--api-key <key>` | 临时覆盖 API Key（优先级高于 env 和配置文件） |
+| `--api-key <key>` | 指定 API Key |
 | `-o, --output table\|json` | 输出格式，默认 `table` |
-
----
-
-## 配置
-
-凭证保存在 `~/.supsub/config.json`（目录权限 0700，文件权限 0600）：
-
-```json
-{
-  "api_key": "sk_live_xxx",
-  "client_id": "supsub-cli"
-}
-```
-
-也支持环境变量（优先级高于配置文件）：
-
-| 变量 | 说明 |
-|------|------|
-| `SUPSUB_API_KEY` | API Key |
-| `SUPSUB_API_URL` | 覆盖 API 地址（默认 `https://supsub.net`） |
-
-凭证解析优先级（高 → 低）：CLI flag `--api-key` > 环境变量 `SUPSUB_API_KEY` > 配置文件 `api_key` > 配置文件 `bearer_token`（手动从浏览器 DevTools 粘贴的临时会话 token）。
 
 ---
 
 ## Skills（AI agent 集成）
 
-`skills/` 下每个子目录包含一份 `SKILL.md`，描述对应命令组的签名、参数、示例与 JSON 输出形态，专门给 Claude Code、Claude API 等 AI agent 阅读，使其能正确调用 `supsub`。npm 包也会一并分发这些文件。
+`skills/` 遵循 [Agent Skills 规范](https://agentskills.io)，可在 Claude Code、Cursor、Gemini CLI、Codex、Copilot 等兼容 agent 中使用。
 
-| Skill | 路径 | 覆盖命令 |
-|-------|------|----------|
-| supsub-auth | `skills/supsub-auth/SKILL.md` | `auth login` / `auth status` / `auth logout` |
-| supsub-sub | `skills/supsub-sub/SKILL.md` | `sub list` / `sub add` / `sub remove` / `sub contents` |
-| supsub-search | `skills/supsub-search/SKILL.md` | `search <keyword>` 全量搜索 |
-| supsub-mp | `skills/supsub-mp/SKILL.md` | `mp search`（异步） / `mp search-cancel` |
+| Skill | 覆盖命令 |
+|-------|----------|
+| supsub-auth | `auth login` / `auth status` / `auth logout` |
+| supsub-sub | `sub list` / `sub add` / `sub remove` / `sub contents` |
+| supsub-search | `search <keyword>` |
+| supsub-mp | `mp search` / `mp search-cancel` |
 
-每份 skill 的 Prerequisites 都是同一句：`pnpm add -g @supsub/cli` 后 `supsub auth login`。Agent 在正式调用前先读 SKILL.md 即可拿到全部上下文。
+### 安装
+
+Claude Code（推荐）：
+
+```shell
+/plugin marketplace add hidumou/supsub-cli
+/plugin install supsub-cli@supsub
+```
+
+其他 agent，用 [`skills` CLI](https://github.com/vercel-labs/skills)：
+
+```bash
+npx skills add hidumou/supsub-cli
+```
+
+### 使用
+
+装完后直接用自然语言即可，agent 会自动调用对应的 skill：
+
+> 帮我订阅「阮一峰的网络日志」这个公众号
+
+> 搜一下最近关于 RAG 的文章，挑 3 条给我
 
 ---
 

@@ -28,6 +28,7 @@
     "bin/",
     "scripts/",
     "skills/",
+    ".claude-plugin/",
     "README.md",
     "LICENSE"
   ],

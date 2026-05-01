@@ -1,0 +1,12 @@
+{
+  "name": "supsub-cli",
+  "description": "Agent skills for the SupSub CLI: auth / sub / search / mp",
+  "version": "0.2.0",
+  "author": {
+    "name": "dumou"
+  },
+  "homepage": "https://github.com/hidumou/supsub-cli",
+  "repository": "https://github.com/hidumou/supsub-cli",
+  "license": "MIT",
+  "keywords": ["supsub", "subscription", "rss", "wechat", "mp"]
+}
