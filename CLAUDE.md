@@ -2,6 +2,44 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+> **READ THIS FIRST if you are answering an end-user natural-language SupSub request.**
+> Many requests will look like "搜一下 X" / "查一下 X" — they are **not** about microblog accounts by default. Consult the routing table immediately below before doing anything else; do not skim source code in `src/commands/` to guess the command.
+
+## End-user 意图 → 命令路由（最高优先级）
+
+This section is the authoritative routing table for **end-user-style natural-language requests** about SupSub usage (登录 / 订阅 / 搜索 / 找公众号 …). The same mapping is encoded in `skills/*/SKILL.md`; this section exists so agents that don't pick up the marketplace skills (e.g. sub-agents inheriting CWD inside this repo) still route correctly. **Match the user's intent against this table first; only then look at command source if you need flag-level detail.**
+
+| 用户意图 (中文) | Skill | 命令 |
+|---|---|---|
+| 登录 / 登出 / 查看登录状态 / 我现在用哪个账号 | `supsub-auth` | `supsub auth login` / `logout` / `status` |
+| 列出订阅 / 我订阅了哪些 / 添加订阅 / 取消订阅 / 看某个订阅里有哪些文章 | `supsub-sub` | `supsub sub list` / `add` / `remove` / `contents` |
+| **搜文章 / 搜内容 / 关键词找文章 / 全文搜 / 「搜一下 X」 / 「搜 X 相关的内容」** | `supsub-search` | `supsub search <kw> [--type ALL\|MP\|WEBSITE\|CONTENT]` |
+| **发现一个具体公众号账号 / 「找 X 这个公众号」 / 想订阅 X 公众号但不知道 ID** | `supsub-mp` | `supsub mp search <name>` → 拿 `mpId` → `supsub sub add` |
+
+### ⚠️ Decision rule for "搜 X" vs "搜公众号 X" — read carefully
+
+The single most common mis-routing in this CLI is sending an article-content query into `mp search`. Stop and check the user's wording:
+
+1. **Default verdict: `supsub search`.** Anything phrased as 「搜一下 X」「在 supsub 里搜 X」「搜 X 相关的内容 / 文章」「查 X 相关文章」「全文搜 X」 → `supsub search <kw>`. The keyword X being a trendy / general topic word (e.g. **「大模型」「RAG」「AI agent」「向量数据库」**) does **NOT** make it a 公众号 query — those are content topics. Pick `supsub search`.
+2. **Override to `supsub mp search` ONLY IF** the user's sentence contains an explicit account-discovery signal:
+   - 「公众号」 字样 (e.g. 「搜公众号 X」「找 X 这个公众号」「X 公众号」)
+   - 「想订阅 X」 + 不知道 ID 的语境
+   - 「这个号」「这个账号」 指代某个具体账号
+3. **When ambiguous, choose `supsub search`** (article/content search). Account discovery via `mp search` is a narrower, opt-in path.
+
+Examples (these have been tested and are the canonical answers — do not contradict them):
+
+- 「在 supsub 里搜一下"大模型"相关的内容」 → `supsub search "大模型"` (NOT `mp search`)
+- 「搜一下"阮一峰"这个公众号」 → `supsub mp search "阮一峰"` (explicit「公众号」)
+- 「搜 RAG」 → `supsub search "RAG"`
+- 「想订阅"机器之心"公众号」 → `supsub mp search "机器之心"` then `supsub sub add ...`
+
+> Prefer the installed binary `supsub <args>` (from `@supsub/cli`); fall back to `pnpm dev -- <args>` only when iterating on uncommitted source changes.
+
+---
+
+The sections below describe how to *develop* this CLI, not how to use it. If your task is implementation/refactor/debug, read on.
+
 ## Runtime & package manager
 
 - Runtime is **Bun** (not Node.js). The shebang in `src/index.ts` is `#!/usr/bin/env bun`. Use `bun` APIs freely; `package.json#engines.node` is informational only.
@@ -42,23 +80,4 @@ Defaults to `https://supsub.net`. Override with `SUPSUB_API_URL` env var (resolv
 ## Conventions
 
 - **Comments and user-facing strings are in Chinese.** New code should match — don't switch to English mid-file.
-- **`mp search` is async**: it polls for ~30s then returns a `searchId` for `task <searchId>` follow-up if the work hasn't completed.
-
-## End-user 意图 → 命令路由（重要）
-
-If you (or a sub-agent spawned in this repo) are answering an **end-user-style natural-language request** about SupSub usage (登录、订阅、搜索、找公众号 …), this is the authoritative routing table — do **not** read `src/commands/` and guess. The same mapping is encoded in `skills/*/SKILL.md`; this section exists so agents that don't pick up the marketplace skills (e.g. sub-agents inheriting CWD inside this repo) still route correctly.
-
-| 用户意图 (中文) | Skill | 命令 |
-|---|---|---|
-| 登录 / 登出 / 查看登录状态 / 我现在用哪个账号 | `supsub-auth` | `supsub auth login` / `logout` / `status` |
-| 列出订阅 / 我订阅了哪些 / 添加订阅 / 取消订阅 / 看某个订阅里有哪些文章 | `supsub-sub` | `supsub sub list` / `add` / `remove` / `contents` |
-| **搜文章 / 搜内容 / 关键词找文章 / 全文搜 / 「搜一下 X 相关的内容」** | `supsub-search` | `supsub search <kw> [--type ALL\|MP\|WEBSITE\|CONTENT]` |
-| **发现公众号本身 / 「找一下 X 这个公众号」 / 想订阅 X 公众号但不知道 ID** | `supsub-mp` | `supsub mp search <name>` → 拿 `mpId` → `supsub sub add` |
-
-⚠️ **`search` vs `mp search` 的边界**（最容易选错的一对）：
-
-- 用户想要的是**文章 / 内容 / 关键词命中的正文** → `supsub search`（即使关键词看起来像公众号名，例如「大模型」「RAG」）。
-- 用户想要的是**一个具体的公众号账号本身**（通常因为想订阅它）→ `supsub mp search`。判断词：「这个公众号」「订阅 X 公众号」「找 X 公众号」。
-- 模糊时，默认走 `supsub search`（文章搜索）；只有明确出现「公众号」「订阅 X」字样才走 `mp search`。
-
-> Prefer the installed binary `supsub <args>` (from `@supsub/cli`); fall back to `pnpm dev -- <args>` only when iterating on uncommitted source changes.
+- Implementation note: the `mp search` command (used only for the narrow 公众号-discovery flow above) is async — it polls for ~30s then returns a `searchId` for follow-up via `mp search-cancel <searchId>`. See `skills/supsub-mp/SKILL.md` for full behavior.
