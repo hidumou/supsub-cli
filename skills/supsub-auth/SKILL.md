@@ -1,7 +1,7 @@
 ---
 name: supsub-auth
 version: 0.1.0
-description: Manage authentication for the SupSub CLI
+description: SupSub CLI 认证管理 —— 登录 / 登出 / 查看登录状态。匹配「supsub 登录」「supsub 登出」「查看我在 supsub 的登录状态」「我现在 supsub 用的是哪个账号」「supsub auth login / logout / status」「我的 supsub 凭证 / API Key 是什么」。在调用其他 supsub 子命令前，如不确定凭证状态可先用本 skill 跑 `supsub auth status`。
 ---
 
 # supsub-auth Skill

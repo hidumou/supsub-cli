@@ -1,7 +1,7 @@
 ---
 name: supsub-sub
 version: 0.1.0
-description: Manage subscription sources (公众号 / 网站) and browse their articles via the SupSub CLI
+description: SupSub 订阅管理 —— 列出 / 添加 / 删除订阅源（微信公众号 MP 或网站 WEBSITE），以及浏览某个已订阅源里的文章列表。匹配「列出我的订阅」「我订阅了哪些」「取消订阅 X」「订阅 X 这个公众号 / 网站」「看 X 订阅里有哪些文章」「X 公众号最近的未读文章」「添加 / 删除订阅源」。⚠️ 不用于跨订阅搜索文章关键词（走 supsub-search），也不用于「发现一个新的公众号」（走 supsub-mp）。
 ---
 
 # supsub-sub Skill
