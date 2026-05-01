@@ -1,6 +1,6 @@
 {
   "name": "@supsub/cli",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "supsub command-line tool",
   "type": "module",
   "homepage": "https://github.com/hidumou/supsub-cli",
