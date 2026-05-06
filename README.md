@@ -1,14 +1,17 @@
 # SupSub CLI
 
-SupSub 的命令行工具，让你在终端里直接管理订阅源、搜索内容、追踪公众号、网站。
+[![npm version](https://img.shields.io/npm/v/@supsub/cli.svg)](https://www.npmjs.com/package/@supsub/cli)
+[![npm downloads](https://img.shields.io/npm/dm/@supsub/cli.svg)](https://www.npmjs.com/package/@supsub/cli)
+[![license](https://img.shields.io/npm/l/@supsub/cli.svg)](https://github.com/hidumou/supsub-cli/blob/master/LICENSE)
+[![node](https://img.shields.io/node/v/@supsub/cli.svg)](https://www.npmjs.com/package/@supsub/cli)
+
+[SupSub](https://supsub.net) 的命令行工具，让你在终端里直接管理订阅源、搜索内容、追踪公众号、网站。
 
 ---
 
 ## 安装
 
 ```bash
-pnpm add -g @supsub/cli
-# 或
 npm i -g @supsub/cli
 ```
 
