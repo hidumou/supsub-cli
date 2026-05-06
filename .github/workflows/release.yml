@@ -118,9 +118,11 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Upgrade npm to support OIDC trusted publishing
-        # --force：避免 npm 自更新时残留旧文件导致的 MODULE_NOT_FOUND
-        # （历史事故：v0.2.2 release 在该步骤报 'Cannot find module promise-retry'）
-        run: npm install -g --force npm@latest
+        # 固定 11.5.1：这是 npm OIDC trusted publishing 要求的最低版本，
+        # 同时绕过 npm@latest 自更新触发的 'Cannot find module promise-retry'
+        # 已知 bug（详见 https://github.com/nodejs/node/issues/62425，影响
+        # Node 22.22.2 自带的 npm@10.9.7 → 11.x latest 自更新路径）。
+        run: npm install -g npm@11.5.1
 
       - name: Update package version
         run: |
