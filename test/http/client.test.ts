@@ -9,11 +9,10 @@
 // - 断言抛出的错误是 { code: "UNAUTHORIZED" }
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import * as fs from 'node:fs/promises';
-import * as os from 'node:os';
-import * as path from 'node:path';
+import { configDir, configFile } from '../_helpers/config-path.ts';
 
-const CONFIG_DIR = path.join(os.homedir(), '.supsub');
-const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
+const CONFIG_DIR = configDir();
+const CONFIG_FILE = configFile();
 
 describe('http/client - 401 触发 clearAuth 并抛出 UNAUTHORIZED', () => {
   let originalFetch: typeof globalThis.fetch;

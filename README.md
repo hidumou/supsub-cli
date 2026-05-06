@@ -47,15 +47,18 @@ supsub search "RAG"
 
 **场景 1：订阅一个公众号**
 ```bash
-# 先搜公众号，拿到 mpId
+# 先搜公众号，拿到 mpId（base64 字符串，例如 MzkyNTYzODk0NQ==）
 supsub mp search "阮一峰的网络日志"
 
-# 拿到结果后用 mpId 添加订阅（type 必须指明 MP）
-supsub sub add --source-id 12345 --type MP
+# 用 --mp-id 添加订阅（不需要 --type，默认 MP）
+supsub sub add --mp-id "MzkyNTYzODk0NQ=="
 
-# 查看这个公众号最近的未读文章
+# 之后想看这个公众号的未读文章，从 sub list 拿到内部 sourceId 即可
+supsub sub list --type MP
 supsub sub contents --source-id 12345 --type MP
 ```
+
+> `--mp-id` 走 `POST /api/mps`，专门吃 `mp search` 那种微信原生 base64 ID；`--source-id` 走 `POST /api/subscriptions`，吃 supsub 内部已收录源的正整数 ID。两者互斥，按你拿到的 ID 形态选一个。
 
 **场景 2：搜索内容**
 ```bash
@@ -114,9 +117,10 @@ supsub auth logout                  退出登录（清除本地凭证）
 supsub sub list                     列出全部订阅源
   --type <MP|WEBSITE>               按类型过滤
 
-supsub sub add                      添加订阅
-  --source-id <id>                  信息源 ID（必填，正整数）
-  --type <MP|WEBSITE>               信息源类型（必填）
+supsub sub add                      添加订阅（--source-id 与 --mp-id 二选一）
+  --source-id <id>                  内部信息源 ID（正整数，来自 search / sub list）
+  --mp-id <mpId>                    公众号 mpId（base64，来自 mp search）
+  --type <MP|WEBSITE>               --source-id 模式必填；--mp-id 模式可省，默认 MP
   --group <gid>                     分组 ID（可重复指定）
 
 supsub sub remove                   取消订阅
@@ -152,6 +156,14 @@ supsub mp search-cancel <searchId>  取消正在执行的搜索任务
 |------|------|
 | `--api-key <key>` | 指定 API Key |
 | `-o, --output table\|json` | 输出格式，默认 `table` |
+
+## 环境变量
+
+| 变量 | 说明 |
+|------|------|
+| `SUPSUB_API_KEY` | API Key（同 `--api-key`，命令行 flag 优先级更高） |
+| `SUPSUB_API_URL` | API 基础地址，默认 `https://supsub.net`，本地起服务调试时改它 |
+| `SUPSUB_CONFIG_DIR` | 配置目录，默认 `~/.supsub`。改它可以多账号切换，或在 CI 里用 tmp 目录跑测试不污染家目录 |
 
 ---
 

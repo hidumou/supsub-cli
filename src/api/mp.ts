@@ -26,3 +26,15 @@ export async function cancelSearchTask(searchId: string): Promise<void> {
     path: `/api/mps/search-tasks/${searchId}`,
   });
 }
+
+/** POST /api/mps — 用 mpId 添加公众号订阅（mpId 是 mp search 返回的 base64 字符串，不是内部 sourceId） */
+export async function addMp(body: {
+  mpId: string;
+  groupIds?: number[];
+}): Promise<{ message: string }> {
+  return request<{ message: string }>({
+    method: 'POST',
+    path: '/api/mps',
+    body,
+  });
+}

@@ -14,7 +14,7 @@ This section is the authoritative routing table for **end-user-style natural-lan
 | 登录 / 登出 / 查看登录状态 / 我现在用哪个账号 | `supsub-auth` | `supsub auth login` / `logout` / `status` |
 | 列出订阅 / 我订阅了哪些 / 添加订阅 / 取消订阅 / 看某个订阅里有哪些文章 | `supsub-sub` | `supsub sub list` / `add` / `remove` / `contents` |
 | **搜文章 / 搜内容 / 关键词找文章 / 全文搜 / 「搜一下 X」 / 「搜 X 相关的内容」** | `supsub-search` | `supsub search <kw> [--type ALL\|MP\|WEBSITE\|CONTENT]` |
-| **发现一个具体公众号账号 / 「找 X 这个公众号」 / 想订阅 X 公众号但不知道 ID** | `supsub-mp` | `supsub mp search <name>` → 拿 `mpId` → `supsub sub add` |
+| **发现一个具体公众号账号 / 「找 X 这个公众号」 / 想订阅 X 公众号但不知道 ID** | `supsub-mp` | `supsub mp search <name>` → 拿 `mpId` → `supsub sub add --mp-id <mpId>` |
 
 ### ⚠️ Decision rule for "搜 X" vs "搜公众号 X" — read carefully
 
@@ -32,7 +32,7 @@ Examples (these have been tested and are the canonical answers — do not contra
 - 「在 supsub 里搜一下"大模型"相关的内容」 → `supsub search "大模型"` (NOT `mp search`)
 - 「搜一下"阮一峰"这个公众号」 → `supsub mp search "阮一峰"` (explicit「公众号」)
 - 「搜 RAG」 → `supsub search "RAG"`
-- 「想订阅"机器之心"公众号」 → `supsub mp search "机器之心"` then `supsub sub add ...`
+- 「想订阅"机器之心"公众号」 → `supsub mp search "机器之心"` 拿 `mpId` → `supsub sub add --mp-id <mpId>`
 
 > Prefer the installed binary `supsub <args>` (from `@supsub/cli`); fall back to `pnpm dev -- <args>` only when iterating on uncommitted source changes.
 
@@ -74,8 +74,9 @@ Defaults to `https://supsub.net`. Override with `SUPSUB_API_URL` env var (resolv
 
 ## Config file
 
-- Path is `~/.supsub/config.json`, hardcoded — not user-configurable.
+- Default path is `~/.supsub/config.json`. Override the directory with `SUPSUB_CONFIG_DIR` env (file name stays `config.json`); evaluated lazily on every read/write so tests can isolate via `bunfig.toml` preload.
 - Directory is mode `0700`, file is mode `0600`. Unix-only; `chmod` is silently skipped on Windows.
+- Tests must never write to the user's real `~/.supsub`. The `test/setup.ts` preload (wired in `bunfig.toml`) mktemp's a dir and exports `SUPSUB_CONFIG_DIR` for the whole `bun test` run; new tests should resolve paths via `test/_helpers/config-path.ts`, never via `os.homedir()`.
 
 ## Conventions
 

@@ -1,16 +1,14 @@
 // packages/cli/test/bearer-token-auth.test.ts
 // add-cli-bearer-token-auth：bearer_token 作为第三种鉴权来源
 //
-// 与 config-store.test.ts 同一策略：在真实 ~/.supsub/config.json 上写读，
-// 用 afterEach 清理。bearer_token 也在清理范围内，避免相互污染。
+// 配置目录由 SUPSUB_CONFIG_DIR 解析，bun preload (test/setup.ts) 已经
+// 把它指向一次性 tmp 目录，afterEach 仅做用例间清理，不会影响本机 ~/.supsub。
 
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
 import * as fs from 'node:fs/promises';
-import * as os from 'node:os';
-import * as path from 'node:path';
+import { configFile } from '../_helpers/config-path.ts';
 
-const CONFIG_DIR = path.join(os.homedir(), '.supsub');
-const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
+const CONFIG_FILE = configFile();
 
 async function cleanupAuthFields(): Promise<void> {
   try {

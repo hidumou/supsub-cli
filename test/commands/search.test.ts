@@ -1,13 +1,12 @@
 // commands/search：参数校验与正常调用
 import { describe, expect, test } from 'bun:test';
 import * as fs from 'node:fs/promises';
-import * as os from 'node:os';
-import * as path from 'node:path';
 import { Command } from 'commander';
 import { registerSearch } from '../../src/commands/search.ts';
+import { configDir, configFile } from '../_helpers/config-path.ts';
 
-const CONFIG_DIR = path.join(os.homedir(), '.supsub');
-const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
+const CONFIG_DIR = configDir();
+const CONFIG_FILE = configFile();
 
 async function cleanupAuthFields(): Promise<void> {
   try {

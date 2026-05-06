@@ -1,24 +1,17 @@
 // packages/cli/test/config-store.test.ts
 // 任务 1.2：config/store.ts 单元自检
 //
-// store.ts 在模块顶层固化了 CONFIG_DIR / CONFIG_FILE（基于 os.homedir()），
-// Bun 会缓存模块，无法在运行时通过修改 HOME 重新计算路径。
-// 因此本测试采用「直接写文件 + 调函数读」的验证策略：
-//   - writeConfig / clearAuth 写到真实 HOME（已隔离到 CI 环境，本地用 afterEach 清理）
-//   - 读结果通过 readConfig() 或直接读 JSON 文件验证
-// 为避免污染真实 ~/.supsub，测试只验证函数行为；若需完整隔离，可在 CI 中设置 HOME。
-//
-// 另一种完全隔离的策略：直接在临时目录中操作文件，然后用 fs.readFile 验证。
-// 这里对 readConfig（文件不存在）采用此策略，对 writeConfig/clearAuth 验证写入结果。
+// store.ts 通过 SUPSUB_CONFIG_DIR 环境变量解析配置目录；
+// test/setup.ts（bun preload）已经把它指向一次性 tmp 目录，
+// 因此本测试 writeConfig / clearAuth 全部落到 tmp，不污染本机 ~/.supsub。
 
 import { afterEach, describe, expect, test } from 'bun:test';
 import * as fs from 'node:fs/promises';
 import * as os from 'node:os';
 import * as path from 'node:path';
+import { configFile } from '../_helpers/config-path.ts';
 
-// 计算真实的配置路径（和 store.ts 保持一致）
-const CONFIG_DIR = path.join(os.homedir(), '.supsub');
-const CONFIG_FILE = path.join(CONFIG_DIR, 'config.json');
+const CONFIG_FILE = configFile();
 
 // 在测试完成后清理认证字段（不删整个目录，可能有其他字段）
 async function cleanupConfigAuth(): Promise<void> {
