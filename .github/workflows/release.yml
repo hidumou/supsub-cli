@@ -118,7 +118,9 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Upgrade npm to support OIDC trusted publishing
-        run: npm install -g npm@latest
+        # --force：避免 npm 自更新时残留旧文件导致的 MODULE_NOT_FOUND
+        # （历史事故：v0.2.2 release 在该步骤报 'Cannot find module promise-retry'）
+        run: npm install -g --force npm@latest
 
       - name: Update package version
         run: |
