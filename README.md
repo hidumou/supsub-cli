@@ -46,7 +46,7 @@ supsub search "RAG"
 
 ---
 
-## 典型使用场景
+## 使用场景
 
 **场景 1：订阅一个公众号**
 ```bash
@@ -61,18 +61,16 @@ supsub sub list --type MP
 supsub sub contents --source-id 12345 --type MP
 ```
 
-> `--mp-id` 走 `POST /api/mps`，专门吃 `mp search` 那种微信原生 base64 ID；`--source-id` 走 `POST /api/subscriptions`，吃 supsub 内部已收录源的正整数 ID。两者互斥，按你拿到的 ID 形态选一个。
-
 **场景 2：搜索内容**
 ```bash
 # 全量搜索（源 + 文章）
-supsub search "RAG"
+supsub search "AI"
 
 # 仅搜公众号
-supsub search "阮一峰" --type MP
+supsub search "Agent" --type MP
 
 # 仅搜文章正文
-supsub search "向量数据库" --type CONTENT
+supsub search "Claude" --type CONTENT
 ```
 
 **场景 3：管理订阅**
@@ -86,20 +84,6 @@ supsub sub list --type WEBSITE
 # 取消订阅
 supsub sub remove --source-id 12345 --type MP
 ```
-
-**场景 4：脚本批处理**
-```bash
-# 导出全部订阅为 JSON，喂给后续脚本
-supsub sub list -o json > subs.json
-
-# 拉取某订阅源的全部内容（包含已读）
-supsub sub contents --source-id 12345 --type MP --all -o json
-
-# 在脚本里取搜索结果
-supsub search "MCP 协议" -o json | jq '.data.results[].data.title'
-```
-
-`mp search` 是异步任务，CLI 默认同步等待结果（最长 30 秒）；超时会返回 `searchId`，可用 `supsub mp search-cancel <searchId>` 取消那个任务后再重试。
 
 ---
 
@@ -165,9 +149,6 @@ supsub mp search-cancel <searchId>  取消正在执行的搜索任务
 | 变量 | 说明 |
 |------|------|
 | `SUPSUB_API_KEY` | API Key（同 `--api-key`，命令行 flag 优先级更高） |
-| `SUPSUB_API_URL` | API 基础地址，默认 `https://supsub.net`，本地起服务调试时改它 |
-| `SUPSUB_CONFIG_DIR` | 配置目录，默认 `~/.supsub`。改它可以多账号切换，或在 CI 里用 tmp 目录跑测试不污染家目录 |
-
 ---
 
 ## Skills（AI agent 集成）
