@@ -10,7 +10,7 @@ const { execSync } = require('child_process');
 
 const pkg = require('../package.json');
 const VERSION = pkg.version;
-const REPO = 'hidumou/supsub-cli';
+const REPO = 'SupSub-AI/supsub-cli';
 
 function getPlatform() {
   const platform = os.platform();

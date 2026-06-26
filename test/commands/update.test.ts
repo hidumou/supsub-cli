@@ -39,7 +39,7 @@ describe('lib/self-update - detectPlatform / buildDownloadUrl', () => {
     const info = detectPlatform();
     const url = buildDownloadUrl('0.3.0', info);
     expect(url).toBe(
-      `https://github.com/hidumou/supsub-cli/releases/download/v0.3.0/supsub-cli_0.3.0_${info.platform}_${info.arch}${info.ext}`,
+      `https://github.com/SupSub-AI/supsub-cli/releases/download/v0.3.0/supsub-cli_0.3.0_${info.platform}_${info.arch}${info.ext}`,
     );
   });
 });

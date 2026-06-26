@@ -2,7 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/@supsub/cli.svg)](https://www.npmjs.com/package/@supsub/cli)
 [![npm downloads](https://img.shields.io/npm/dm/@supsub/cli.svg)](https://www.npmjs.com/package/@supsub/cli)
-[![license](https://img.shields.io/npm/l/@supsub/cli.svg)](https://github.com/hidumou/supsub-cli/blob/master/LICENSE)
+[![license](https://img.shields.io/npm/l/@supsub/cli.svg)](https://github.com/SupSub-AI/supsub-cli/blob/master/LICENSE)
 [![node](https://img.shields.io/node/v/@supsub/cli.svg)](https://www.npmjs.com/package/@supsub/cli)
 
 [SupSub](https://supsub.net) 的命令行工具，让你在终端里直接管理订阅源、搜索内容、追踪公众号、网站。
@@ -177,14 +177,14 @@ supsub update                       检查并更新到最新版本（下载新 b
 Claude Code（推荐）：
 
 ```shell
-/plugin marketplace add hidumou/supsub-cli
+/plugin marketplace add SupSub-AI/supsub-cli
 /plugin install supsub-cli@supsub
 ```
 
 其他 agent，用 [`skills` CLI](https://github.com/vercel-labs/skills)：
 
 ```bash
-npx skills add hidumou/supsub-cli
+npx skills add SupSub-AI/supsub-cli
 ```
 
 ### 使用

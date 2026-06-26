@@ -3,13 +3,13 @@
   "version": "0.3.0",
   "description": "supsub command-line tool",
   "type": "module",
-  "homepage": "https://github.com/hidumou/supsub-cli",
+  "homepage": "https://github.com/SupSub-AI/supsub-cli",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hidumou/supsub-cli.git"
+    "url": "git+https://github.com/SupSub-AI/supsub-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/hidumou/supsub-cli/issues"
+    "url": "https://github.com/SupSub-AI/supsub-cli/issues"
   },
   "license": "MIT",
   "author": "dumou",

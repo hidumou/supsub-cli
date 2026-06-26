@@ -4,8 +4,8 @@
   "author": {
     "name": "dumou"
   },
-  "homepage": "https://github.com/hidumou/supsub-cli",
-  "repository": "https://github.com/hidumou/supsub-cli",
+  "homepage": "https://github.com/SupSub-AI/supsub-cli",
+  "repository": "https://github.com/SupSub-AI/supsub-cli",
   "license": "MIT",
   "keywords": ["supsub", "subscription", "rss", "wechat", "mp"]
 }
