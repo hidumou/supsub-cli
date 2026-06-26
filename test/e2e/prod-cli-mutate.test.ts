@@ -1,4 +1,5 @@
-// E2E（写操作）：通过子进程驱动 supsub CLI，针对会变更线上数据的命令做闭环验证。
+// E2E（写操作）：通过子进程驱动 supsub CLI，针对会变更后端数据的命令做闭环验证。
+// 默认基址即测试环境 https://supsub-api.ctrlcv.tech（不强制覆盖 SUPSUB_API_URL）。
 //
 // ⚠️  默认双重跳过：
 //        - 缺 SUPSUB_E2E_BEARER 跳过（与只读 e2e 同样的鉴权门槛）

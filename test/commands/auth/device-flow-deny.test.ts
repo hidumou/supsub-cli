@@ -1,64 +1,78 @@
-// packages/cli/test/auth-deny.test.ts
-// 任务 5.8：device flow 收到 access_denied 时立即 reject 并携带正确 message
+// device-flow：状态轮询的终态语义
+//
+// 新设备授权设计基于「状态轮询」，不再有 OAuth 的 access_denied 错误码；
+// 终态拒绝的等价物是 status === 'expired'（设备码过期 → 立即停止并报错）。
+// 本文件覆盖：expired 报错并停止轮询、authorized 直接成功、snake_case 字段容错。
 import { afterEach, beforeEach, describe, expect, test } from 'bun:test';
+import { runDeviceFlow } from '../../../src/commands/auth/device-flow.ts';
 
 const FAKE_DEVICE_CODE_RESPONSE = {
-  code: 'test-device-code',
-  verification_uri: 'http://fake-host/device',
-  user_code: 'ABCD-1234',
-  expires_in: 10,
-  interval: 0.001, // 1ms 间隔，加 add-cli-interval-fallback 后避免触发 5s fallback
+  deviceCode: 'dev-code-xyz',
+  userCode: 'ABCD-1234',
+  verificationUri: 'http://fake-host/device',
+  verificationUriComplete: 'http://fake-host/device?code=ABCD-1234',
+  interval: 0.001, // 1ms，避免触发 5s fallback 拖慢测试
+  expiresIn: 10,
 };
 
-describe('device-flow - access_denied 立即停止并抛出', () => {
-  let callCount: number;
+type TokenResponder = () => Response;
+
+function installFetchMock(tokenResponder: TokenResponder): {
+  getCounts: () => { code: number; token: number };
+} {
+  let codeCount = 0;
+  let tokenCount = 0;
+  globalThis.fetch = async (input: RequestInfo | URL): Promise<Response> => {
+    const url =
+      typeof input === 'string'
+        ? input
+        : input instanceof URL
+          ? input.href
+          : (input as Request).url;
+    if (url.includes('/api/auth/device/code')) {
+      codeCount++;
+      return new Response(JSON.stringify(FAKE_DEVICE_CODE_RESPONSE), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    tokenCount++;
+    return tokenResponder();
+  };
+  return { getCounts: () => ({ code: codeCount, token: tokenCount }) };
+}
+
+describe('device-flow - 状态轮询终态', () => {
   let originalFetch: typeof globalThis.fetch;
   let originalStderrWrite: typeof process.stderr.write;
+  let originalNoBrowser: string | undefined;
 
   beforeEach(() => {
-    callCount = 0;
     originalFetch = globalThis.fetch;
     originalStderrWrite = process.stderr.write.bind(process.stderr);
-
-    // 静默 stderr 输出，避免测试中打印干扰
+    originalNoBrowser = process.env.SUPSUB_NO_BROWSER;
+    process.env.SUPSUB_NO_BROWSER = '1';
     process.stderr.write = (() => true) as typeof process.stderr.write;
-
-    // mock fetch 序列
-    globalThis.fetch = async (input: RequestInfo | URL, _init?: RequestInit): Promise<Response> => {
-      const url =
-        typeof input === 'string'
-          ? input
-          : input instanceof URL
-            ? input.href
-            : (input as Request).url;
-      callCount++;
-
-      if (url.includes('/oauth/device/code')) {
-        // 第 1 次：返回 device code
-        return new Response(JSON.stringify(FAKE_DEVICE_CODE_RESPONSE), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' },
-        });
-      }
-
-      // 第 2 次（token 轮询）：返回 access_denied
-      return new Response(
-        JSON.stringify({ error: 'access_denied', error_description: '用户拒绝了授权' }),
-        {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        },
-      );
-    };
   });
 
   afterEach(() => {
     globalThis.fetch = originalFetch;
     process.stderr.write = originalStderrWrite;
+    if (originalNoBrowser === undefined) {
+      delete process.env.SUPSUB_NO_BROWSER;
+    } else {
+      process.env.SUPSUB_NO_BROWSER = originalNoBrowser;
+    }
   });
 
-  test('5.8.a access_denied 触发 code=ACCESS_DENIED 的 reject', async () => {
-    const { runDeviceFlow } = await import('../../../src/commands/auth/device-flow.ts');
+  test('status=expired 触发 code=EXPIRED_TOKEN 的 reject', async () => {
+    installFetchMock(
+      () =>
+        new Response(JSON.stringify({ status: 'expired' }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+    );
 
     let caughtError: unknown;
     try {
@@ -68,24 +82,18 @@ describe('device-flow - access_denied 立即停止并抛出', () => {
     }
 
     expect(caughtError).toBeDefined();
-    expect((caughtError as { code: string }).code).toBe('ACCESS_DENIED');
+    expect((caughtError as { code: string }).code).toBe('EXPIRED_TOKEN');
+    expect((caughtError as { message: string }).message).toContain('设备码已过期');
   });
 
-  test('5.8.b access_denied 时 error.message 含「用户拒绝授权」', async () => {
-    const { runDeviceFlow } = await import('../../../src/commands/auth/device-flow.ts');
-
-    let caughtError: unknown;
-    try {
-      await runDeviceFlow();
-    } catch (err) {
-      caughtError = err;
-    }
-
-    expect((caughtError as { message: string }).message).toContain('用户拒绝授权');
-  });
-
-  test('5.8.c access_denied 后不再发起第 3 次 token 请求', async () => {
-    const { runDeviceFlow } = await import('../../../src/commands/auth/device-flow.ts');
+  test('status=expired 后不再发起第二次 token 轮询', async () => {
+    const mock = installFetchMock(
+      () =>
+        new Response(JSON.stringify({ status: 'expired' }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        }),
+    );
 
     try {
       await runDeviceFlow();
@@ -93,7 +101,43 @@ describe('device-flow - access_denied 立即停止并抛出', () => {
       // 预期抛出
     }
 
-    // 只有 2 次：1 次 device/code + 1 次 token 轮询
-    expect(callCount).toBe(2);
+    // 1 次 device/code + 1 次 token 轮询（expired 立即停止）
+    expect(mock.getCounts()).toEqual({ code: 1, token: 1 });
+  });
+
+  test('status=authorized 直接返回 access_token / refresh_token', async () => {
+    installFetchMock(
+      () =>
+        new Response(
+          JSON.stringify({
+            status: 'authorized',
+            accessToken: 'acc-1',
+            refreshToken: 'ref-1',
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } },
+        ),
+    );
+
+    const result = await runDeviceFlow();
+    expect(result.access_token).toBe('acc-1');
+    expect(result.refresh_token).toBe('ref-1');
+  });
+
+  test('authorized 响应使用 snake_case 字段时同样兼容', async () => {
+    installFetchMock(
+      () =>
+        new Response(
+          JSON.stringify({
+            status: 'authorized',
+            access_token: 'snake-acc',
+            refresh_token: 'snake-ref',
+          }),
+          { status: 200, headers: { 'Content-Type': 'application/json' } },
+        ),
+    );
+
+    const result = await runDeviceFlow();
+    expect(result.access_token).toBe('snake-acc');
+    expect(result.refresh_token).toBe('snake-ref');
   });
 });

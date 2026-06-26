@@ -14,7 +14,14 @@ async function cleanupAuthFields(): Promise<void> {
   try {
     const content = await fs.readFile(CONFIG_FILE, 'utf-8');
     const parsed = JSON.parse(content) as Record<string, unknown>;
-    const { api_key: _a, client_id: _c, bearer_token: _b, ...rest } = parsed;
+    const {
+      access_token: _at,
+      refresh_token: _rt,
+      api_key: _a,
+      client_id: _c,
+      bearer_token: _b,
+      ...rest
+    } = parsed;
     await fs.writeFile(CONFIG_FILE, JSON.stringify(rest, null, 2), 'utf-8');
   } catch {
     // 文件不存在时忽略
@@ -112,6 +119,61 @@ describe('resolveApiKey - bearer_token 第三种鉴权来源', () => {
     expect(cfg.api_key).toBeUndefined();
     expect(cfg.bearer_token).toBeUndefined();
     expect(cfg.client_id).toBeUndefined();
+  });
+
+  test('仅 access_token 时被识别为 config 来源', async () => {
+    const { writeConfig } = await import('../../src/config/store.ts');
+    const { resolveApiKey } = await import('../../src/http/credentials.ts');
+
+    await writeConfig({ access_token: 'acc.token.jwt', client_id: 'supsub-cli' });
+
+    const result = await resolveApiKey();
+    expect(result.key).toBe('acc.token.jwt');
+    expect(result.clientId).toBe('supsub-cli');
+    // 复用 'config' 来源，不新增 source 值
+    expect(result.source).toBe('config');
+  });
+
+  test('access_token 与 api_key 共存时 access_token 胜出', async () => {
+    const { writeConfig } = await import('../../src/config/store.ts');
+    const { resolveApiKey } = await import('../../src/http/credentials.ts');
+
+    await writeConfig({
+      access_token: 'acc.token.jwt',
+      api_key: 'sk_live_xxx',
+      client_id: 'supsub-cli',
+    });
+
+    const result = await resolveApiKey();
+    expect(result.key).toBe('acc.token.jwt');
+    expect(result.source).toBe('config');
+  });
+
+  test('access_token 与 bearer_token 共存时 access_token 胜出', async () => {
+    const { writeConfig } = await import('../../src/config/store.ts');
+    const { resolveApiKey } = await import('../../src/http/credentials.ts');
+
+    await writeConfig({
+      access_token: 'acc.token.jwt',
+      bearer_token: 'browser_token',
+      client_id: 'supsub-cli',
+    });
+
+    const result = await resolveApiKey();
+    expect(result.key).toBe('acc.token.jwt');
+    expect(result.source).toBe('config');
+  });
+
+  test('env SUPSUB_API_KEY 与 access_token 共存时 env 胜出', async () => {
+    const { writeConfig } = await import('../../src/config/store.ts');
+    const { resolveApiKey } = await import('../../src/http/credentials.ts');
+
+    await writeConfig({ access_token: 'acc.token.jwt', client_id: 'supsub-cli' });
+    process.env.SUPSUB_API_KEY = 'env_key';
+
+    const result = await resolveApiKey();
+    expect(result.key).toBe('env_key');
+    expect(result.source).toBe('env');
   });
 
   test('无任何凭证时 source 为 undefined', async () => {

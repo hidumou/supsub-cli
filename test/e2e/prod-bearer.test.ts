@@ -20,7 +20,7 @@ function decodeJwtPayload(token: string): { id?: number; email?: string } {
   return JSON.parse(json) as { id?: number; email?: string };
 }
 
-describe.skipIf(SKIP)('e2e/prod-bearer - 正式环境 bearer_token 鉴权', () => {
+describe.skipIf(SKIP)('e2e/prod-bearer - 测试环境 bearer_token 鉴权', () => {
   let originalApiUrl: string | undefined;
   let originalEnvKey: string | undefined;
   let expectedId: number | undefined;
@@ -33,8 +33,8 @@ describe.skipIf(SKIP)('e2e/prod-bearer - 正式环境 bearer_token 鉴权', () =
 
     originalApiUrl = process.env.SUPSUB_API_URL;
     originalEnvKey = process.env.SUPSUB_API_KEY;
-    // 强制走正式环境，覆盖本地可能存在的 SUPSUB_API_URL（如 dev mock server）
-    process.env.SUPSUB_API_URL = 'https://supsub.net';
+    // 强制走测试环境，覆盖本地可能存在的 SUPSUB_API_URL（如 dev mock server）
+    process.env.SUPSUB_API_URL = 'https://supsub-api.ctrlcv.tech';
     // 清掉环境里的 api_key，避免抢占优先级
     delete process.env.SUPSUB_API_KEY;
     // 通过 cliApiKey 通道注入 bearer_token，不动 ~/.supsub/config.json

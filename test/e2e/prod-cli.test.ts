@@ -17,7 +17,8 @@ type CliResult = { stdout: string; stderr: string; code: number };
  * 关键点：
  *   - HOME 指到一个空临时目录，强制 readConfig 拿空对象，
  *     避免本机现有 ~/.supsub/config.json 抢 source=config 优先级
- *   - SUPSUB_API_URL 强制指向正式环境 supsub.net
+ *   - 不强制覆盖 SUPSUB_API_URL：默认基址即测试环境
+ *     https://supsub-api.ctrlcv.tech（DEFAULT_API_URL）
  *   - exitOverride 不可用（真实子进程），靠 exit code 判断业务结果
  */
 async function runCli(
@@ -59,7 +60,7 @@ async function runCli(
   });
 }
 
-describe.skipIf(SKIP)('e2e/prod-cli - 通过子进程驱动 CLI 打正式环境', () => {
+describe.skipIf(SKIP)('e2e/prod-cli - 通过子进程驱动 CLI 打测试环境', () => {
   let tmpHome: string;
 
   beforeAll(async () => {

@@ -25,12 +25,12 @@ export function registerAuthLogin(parent: Command): void {
         return;
       }
 
-      // Device Flow
-      const { api_key, client_id } = await runDeviceFlow();
-      await writeConfig({ api_key, client_id });
+      // Device Flow（设备授权）：成功后存储 access_token / refresh_token
+      const { access_token, refresh_token } = await runDeviceFlow();
+      await writeConfig({ access_token, refresh_token, client_id: 'supsub-cli' });
       process.stderr.write('✅ 登录成功\n');
       if (fmt === 'json') {
-        output({ client_id }, 'json', () => {});
+        output({ client_id: 'supsub-cli' }, 'json', () => {});
       }
     });
 }

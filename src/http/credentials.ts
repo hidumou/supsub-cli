@@ -21,7 +21,7 @@ type ResolvedCredentials = {
    * 当前 key 的来源：
    * - flag    → `--api-key` 命令行 flag
    * - env     → `SUPSUB_API_KEY` 环境变量
-   * - config  → `~/.supsub/config.json` 中的 `api_key`
+   * - config  → `~/.supsub/config.json` 中的 `access_token` 或 `api_key`
    * - session → `~/.supsub/config.json` 中的 `bearer_token`（手动从浏览器粘贴）
    * - 未登录态时为 undefined
    */
@@ -32,8 +32,9 @@ type ResolvedCredentials = {
  * 解析 API Key，优先级（从高到低）：
  * 1. CLI flag `--api-key`（由 setCliApiKey 注入）
  * 2. 环境变量 SUPSUB_API_KEY
- * 3. ~/.supsub/config.json 的 api_key
- * 4. ~/.supsub/config.json 的 bearer_token（临时浏览器会话 token）
+ * 3. ~/.supsub/config.json 的 access_token（设备授权访问令牌）
+ * 4. ~/.supsub/config.json 的 api_key
+ * 5. ~/.supsub/config.json 的 bearer_token（临时浏览器会话 token）
  */
 export async function resolveApiKey(): Promise<ResolvedCredentials> {
   if (cliApiKey) {
@@ -47,6 +48,14 @@ export async function resolveApiKey(): Promise<ResolvedCredentials> {
     };
   }
   const cfg = await readConfig();
+  // access_token 命中时复用 'config' 来源（不新增 source 值，避免破坏现有断言）
+  if (cfg.access_token) {
+    return {
+      key: cfg.access_token,
+      clientId: cfg.client_id ?? 'supsub-cli',
+      source: 'config',
+    };
+  }
   if (cfg.api_key) {
     return {
       key: cfg.api_key,

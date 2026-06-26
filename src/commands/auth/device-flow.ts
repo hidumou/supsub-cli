@@ -19,6 +19,16 @@ function openBrowser(url: string): void {
 }
 
 /**
+ * 判断环境变量是否为「真值」。
+ * 用于 SUPSUB_NO_BROWSER 护栏：空串 / '0' / 'false' 视为假，其余非空字符串视为真。
+ */
+function isTruthyEnv(value: string | undefined): boolean {
+  if (!value) return false;
+  const v = value.trim().toLowerCase();
+  return v !== '' && v !== '0' && v !== 'false';
+}
+
+/**
  * 计算初始轮询间隔。
  * RFC 8628 fallback：服务端漏返或非正数时回落到 5 秒。
  */
@@ -27,73 +37,74 @@ export function pickInitialIntervalMs(serverInterval: number): number {
 }
 
 /**
- * 执行 OAuth Device Flow，返回 { api_key, client_id }
+ * 执行设备授权流程（状态轮询），返回 { access_token, refresh_token }。
  * apiUrl 由 api 层内部从 env/默认常量解析，不再走函数参数。
  */
 export async function runDeviceFlow(): Promise<{
-  api_key: string;
-  client_id: string;
+  access_token: string;
+  refresh_token: string;
 }> {
   // 1. 申请设备码
-  const { code, verification_uri, user_code, expires_in, interval } = await requestDeviceCode();
+  const { deviceCode, userCode, verificationUri, verificationUriComplete, interval, expiresIn } =
+    await requestDeviceCode();
 
-  // 2. 打印提示并尝试打开浏览器
-  const verificationUrl = `${verification_uri}?user_code=${encodeURIComponent(user_code)}`;
+  // 2. 拼接授权地址：优先使用带码的 verificationUriComplete（可直接打开），
+  //    缺失时回落到 verificationUri + userCode。
+  const verificationUrl =
+    verificationUriComplete && verificationUriComplete.trim() !== ''
+      ? verificationUriComplete
+      : `${verificationUri}?user_code=${encodeURIComponent(userCode)}`;
+
+  // 3. 打印提示，并按需打开浏览器
   process.stderr.write(`请在浏览器打开 ${verificationUrl}\n`);
-  process.stderr.write(`授权码: ${user_code}\n`);
+  process.stderr.write(`授权码: ${userCode}\n`);
   process.stderr.write(`等待授权中...\n`);
-  openBrowser(verificationUrl);
+  // SUPSUB_NO_BROWSER 为真值时跳过自动打开浏览器（e2e / 无头环境）
+  if (!isTruthyEnv(process.env.SUPSUB_NO_BROWSER)) {
+    openBrowser(verificationUrl);
+  }
 
-  // 3. 轮询
-  let intervalMs = pickInitialIntervalMs(interval);
-  const deadline = Date.now() + expires_in * 1000;
+  // 4. 轮询授权状态
+  const intervalMs = pickInitialIntervalMs(interval);
+  const deadline = Date.now() + expiresIn * 1000;
 
   while (Date.now() < deadline) {
     await sleep(intervalMs);
 
     let result: Awaited<ReturnType<typeof pollDeviceToken>>;
     try {
-      result = await pollDeviceToken(code);
+      result = await pollDeviceToken(deviceCode);
     } catch {
-      // 网络闪断，继续重试
+      // 网络闪断 / 瞬时错误，继续重试
       continue;
     }
 
-    if (result.ok) {
+    if (result.status === 'authorized') {
+      if (!result.accessToken || !result.refreshToken) {
+        throw {
+          code: 'SERVER_ERROR',
+          message: '授权成功但未返回令牌，请重试',
+          status: 0,
+        } satisfies ErrorEnvelope;
+      }
       return {
-        api_key: result.data.api_key,
-        client_id: result.data.client_id,
+        access_token: result.accessToken,
+        refresh_token: result.refreshToken,
       };
     }
 
-    // 400 系列错误：兼容 OAuth2 标准（顶层 error）与 supsub ErrorEnvelope（data.error）
-    const errCode = result.error.data?.error ?? result.error.error ?? '';
-
-    if (errCode === 'authorization_pending') {
-    } else if (errCode === 'slow_down') {
-      intervalMs += 1000;
-    } else if (errCode === 'expired_token') {
+    if (result.status === 'expired') {
       throw {
         code: 'EXPIRED_TOKEN',
         message: '设备码已过期，请重新运行 supsub auth login',
         status: 0,
       } satisfies ErrorEnvelope;
-    } else if (errCode === 'access_denied') {
-      throw {
-        code: 'ACCESS_DENIED',
-        message: '用户拒绝授权',
-        status: 0,
-      } satisfies ErrorEnvelope;
-    } else {
-      throw {
-        code: 'SERVER_ERROR',
-        message: result.error.error_description ?? '授权失败',
-        status: result.status,
-      } satisfies ErrorEnvelope;
     }
+
+    // status === 'pending' → 继续轮询
   }
 
-  // 超时
+  // 超过有效期仍未授权
   throw {
     code: 'EXPIRED_TOKEN',
     message: '设备码已过期，请重新运行 supsub auth login',

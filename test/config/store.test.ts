@@ -18,7 +18,14 @@ async function cleanupConfigAuth(): Promise<void> {
   try {
     const content = await fs.readFile(CONFIG_FILE, 'utf-8');
     const parsed = JSON.parse(content) as Record<string, unknown>;
-    const { api_key: _a, client_id: _c, ...rest } = parsed;
+    const {
+      access_token: _at,
+      refresh_token: _rt,
+      api_key: _a,
+      client_id: _c,
+      bearer_token: _b,
+      ...rest
+    } = parsed;
     await fs.writeFile(CONFIG_FILE, JSON.stringify(rest, null, 2), 'utf-8');
   } catch {
     // 文件不存在时忽略
@@ -57,6 +64,21 @@ describe('config/store - readConfig / writeConfig / clearAuth', () => {
     await clearAuth();
     const config = await readConfig();
     expect(config.api_key).toBeUndefined();
+    expect(config.client_id).toBeUndefined();
+  });
+
+  test('1.2.e clearAuth 同时移除 access_token / refresh_token', async () => {
+    const { writeConfig, readConfig, clearAuth } = await import('../../src/config/store.ts');
+
+    await writeConfig({
+      access_token: 'acc_unit',
+      refresh_token: 'ref_unit',
+      client_id: 'supsub-cli',
+    });
+    await clearAuth();
+    const config = await readConfig();
+    expect(config.access_token).toBeUndefined();
+    expect(config.refresh_token).toBeUndefined();
     expect(config.client_id).toBeUndefined();
   });
 
