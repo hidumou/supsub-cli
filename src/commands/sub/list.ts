@@ -3,6 +3,7 @@ import type { Command } from 'commander';
 import { listSubs } from '../../api/subscription.ts';
 import type { Subscription } from '../../lib/types.ts';
 import { output } from '../../ui/output.ts';
+import { withSpinner } from '../../ui/spinner.ts';
 import { printTable, truncate } from '../../ui/table.ts';
 import { normalizeType } from './_args.ts';
 
@@ -41,7 +42,7 @@ export function registerSubList(parent: Command): void {
       const fmt = globalOpts.output;
 
       const sourceType = opts.type ? normalizeType(opts.type) : undefined;
-      const data = await listSubs({ sourceType });
+      const data = await withSpinner('加载订阅列表…', () => listSubs({ sourceType }));
 
       output(data, fmt, renderSubscriptionTable);
     });

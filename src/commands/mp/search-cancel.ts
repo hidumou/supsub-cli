@@ -3,6 +3,7 @@ import type { Command } from 'commander';
 import { cancelSearchTask } from '../../api/mp.ts';
 import { dieWith, isErrorEnvelope } from '../../lib/errors.ts';
 import { output } from '../../ui/output.ts';
+import { withSpinner } from '../../ui/spinner.ts';
 import { printTable } from '../../ui/table.ts';
 
 export function registerMpSearchCancel(parent: Command): void {
@@ -13,7 +14,7 @@ export function registerMpSearchCancel(parent: Command): void {
       const fmt = (parent.parent?.opts().output ?? undefined) as string | undefined;
 
       try {
-        await cancelSearchTask(searchId);
+        await withSpinner('取消任务…', () => cancelSearchTask(searchId));
       } catch (err) {
         if (isErrorEnvelope(err) && err.status === 404) {
           dieWith(

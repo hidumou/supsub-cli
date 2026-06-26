@@ -11,7 +11,7 @@ Log in, log out, and check authentication status for the SupSub CLI.
 ## Prerequisites
 
 - 安装：`pnpm add -g @supsub/cli`（或 `npm i -g @supsub/cli`）
-- 凭证保存在 `~/.supsub/config.json`（目录权限 0700，文件权限 0600）。也可通过 `SUPSUB_API_KEY` 环境变量或全局 `--api-key` flag 临时覆盖；优先级：`--api-key` > `SUPSUB_API_KEY` > 配置文件 `api_key` > 配置文件 `bearer_token`。
+- 凭证保存在 `~/.supsub/config.json`（目录权限 0700，文件权限 0600）。OAuth 登录写入 `access_token` / `refresh_token`，`--api-key` 登录写入 `api_key`。也可通过 `SUPSUB_API_KEY` 环境变量或全局 `--api-key` flag 临时覆盖；优先级：`--api-key` > `SUPSUB_API_KEY` > 配置文件 `access_token`（设备授权令牌）> 配置文件 `api_key` > 配置文件 `bearer_token`。
 
 ## Commands
 
@@ -37,7 +37,7 @@ supsub --api-key sk_live_xxx auth login
 
 > 说明：`--api-key` 是顶层全局 flag。直接 `supsub auth login --api-key ...` 在某些 commander 版本下会被解析，但官方推荐顺序是 `supsub --api-key ... auth login`。
 >
-> JSON 模式 (`-o json`) 下，登录成功 stdout 输出 `{"success":true,"data":{"client_id":"supsub-cli"}}`；提示信息走 stderr。
+> JSON 模式 (`-o json`) 下，登录成功 stdout 输出 `{"success":true,"data":{"client_id":"supsub-cli","email":"...","name":"..."}}`（`email` / `name` 来自登录后拉取的用户信息；若拉取失败这两个字段缺省，退化为 `{"client_id":"supsub-cli"}`）；提示信息走 stderr。
 
 ---
 
@@ -47,7 +47,7 @@ supsub --api-key sk_live_xxx auth login
 supsub auth status
 ```
 
-Shows the current logged-in user, masked API key, and the source of credentials (cli / env / config).
+Shows the current logged-in user, masked API key, and the source of credentials (`flag` / `env` / `config` / `session`)。其中 `access_token` 与 `api_key` 都归入 `config`，`bearer_token` 归入 `session`。
 
 ```bash
 supsub auth status
@@ -94,7 +94,7 @@ JSON 模式下输出 `{"success":true,"data":{}}`。
 
 - 在调用其他 supsub 子命令之前先跑 `supsub auth status`，确认凭证有效；未登录时引导用户 `supsub auth login`。
 - `--api-key` 是 **全局** flag（注册在顶层 `program` 上），传一次即可临时覆盖整个调用链的凭证；它不会写入配置文件，只对本次 invocation 生效。
-- 优先级（高 → 低）：CLI `--api-key` > `SUPSUB_API_KEY` env > 配置文件 `api_key` > 配置文件 `bearer_token`。
-- 401 响应会自动清除本地存储的 API Key（见 `src/http/credentials.ts`）；遇到 exit code `2` 时通常需要重新登录。
+- 优先级（高 → 低）：CLI `--api-key` > `SUPSUB_API_KEY` env > 配置文件 `access_token`（设备授权令牌）> 配置文件 `api_key` > 配置文件 `bearer_token`。
+- 401 响应会自动清除本地存储的全部凭证（`access_token` / `refresh_token` / `api_key` / `bearer_token`，见 `src/http/client.ts` 调用的 `clearAuth()`）；遇到 exit code `2` 时通常需要重新登录。
 - 解析 JSON 时使用 `-o json`；常见 exit code：`0` OK，`2` UNAUTHORIZED，`3` PLAN_EXPIRED，`10` NETWORK，`11` SERVER，`64` INVALID_ARGS。
 - 自定义 API base URL：设置 `SUPSUB_API_URL`（默认 `https://supsub.net`），用于本地或测试环境。

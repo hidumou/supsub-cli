@@ -63,10 +63,7 @@ describe('commands/sub/add - 添加订阅', () => {
       'utf-8',
     );
 
-    globalThis.fetch = async (
-      input: RequestInfo | URL,
-      init?: RequestInit,
-    ): Promise<Response> => {
+    globalThis.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
       captured.url =
         typeof input === 'string'
           ? input

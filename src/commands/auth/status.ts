@@ -4,6 +4,7 @@ import { getUserInfo } from '../../api/auth.ts';
 import { resolveApiKey } from '../../http/credentials.ts';
 import { dieWith } from '../../lib/errors.ts';
 import { output } from '../../ui/output.ts';
+import { withSpinner } from '../../ui/spinner.ts';
 import { printTable, truncate } from '../../ui/table.ts';
 
 function maskApiKey(key: string): string {
@@ -27,7 +28,7 @@ export function registerAuthStatus(parent: Command): void {
         );
       }
 
-      const info = await getUserInfo();
+      const info = await withSpinner('获取用户信息…', () => getUserInfo());
 
       const apiKeySource = source ?? 'config';
       const maskedKey = maskApiKey(key);

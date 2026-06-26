@@ -3,6 +3,7 @@ import type { Command } from 'commander';
 import { getContents } from '../../api/subscription.ts';
 import type { Article } from '../../lib/types.ts';
 import { output } from '../../ui/output.ts';
+import { withSpinner } from '../../ui/spinner.ts';
 import { printTable, truncate } from '../../ui/table.ts';
 import { normalizeType, parseSourceId, requireExclusive } from './_args.ts';
 
@@ -61,34 +62,29 @@ export function registerSubContents(parent: Command): void {
     .requiredOption('--type <type>', '信息源类型：MP|WEBSITE')
     .option('--all', '显示全部文章')
     .option('--unread', '仅显示未读（默认）')
-    .action(
-      async (opts: {
-        sourceId: string;
-        type: string;
-        all?: boolean;
-        unread?: boolean;
-      }) => {
-        const globalOpts = (parent.parent?.opts() ?? {}) as { output?: string };
-        const fmt = globalOpts.output;
+    .action(async (opts: { sourceId: string; type: string; all?: boolean; unread?: boolean }) => {
+      const globalOpts = (parent.parent?.opts() ?? {}) as { output?: string };
+      const fmt = globalOpts.output;
 
-        // 互斥校验
-        requireExclusive(
-          opts as unknown as Record<string, unknown>,
-          ['all', 'unread'],
-          '--all 与 --unread 互斥，请只指定一个',
-        );
+      // 互斥校验
+      requireExclusive(
+        opts as unknown as Record<string, unknown>,
+        ['all', 'unread'],
+        '--all 与 --unread 互斥，请只指定一个',
+      );
 
-        const sourceType = normalizeType(opts.type);
-        const sourceId = parseSourceId(opts.sourceId);
-        const contentType = opts.all ? 'all' : 'unread';
+      const sourceType = normalizeType(opts.type);
+      const sourceId = parseSourceId(opts.sourceId);
+      const contentType = opts.all ? 'all' : 'unread';
 
-        const data = await getContents({
+      const data = await withSpinner('加载文章列表…', () =>
+        getContents({
           sourceType,
           sourceId,
           type: contentType,
-        });
+        }),
+      );
 
-        output(data, fmt, renderArticleTable);
-      },
-    );
+      output(data, fmt, renderArticleTable);
+    });
 }

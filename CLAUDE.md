@@ -70,7 +70,7 @@ These conventions are enforced by the existing structure — new code must follo
 
 ## API base URL
 
-Defaults to `https://supsub.net`. Override with `SUPSUB_API_URL` env var (resolved in `src/lib/api-url.ts`). Use this for local API server testing.
+Defaults to `https://supsub.net`. Override with the `--api-url` global flag or the `SUPSUB_API_URL` env var (flag wins; both resolved in `src/lib/api-url.ts` via `getApiUrl()`, with the flag injected through `setCliApiUrl` in the `preAction` hook). Use this for local API server testing.
 
 ## Config file
 

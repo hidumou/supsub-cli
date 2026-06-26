@@ -3,6 +3,7 @@
 import { pollDeviceToken, requestDeviceCode } from '../../api/auth.ts';
 import type { ErrorEnvelope } from '../../lib/errors.ts';
 import { sleep } from '../../lib/sleep.ts';
+import { withSpinner } from '../../ui/spinner.ts';
 
 function openBrowser(url: string): void {
   const cmd =
@@ -58,56 +59,57 @@ export async function runDeviceFlow(): Promise<{
   // 3. 打印提示，并按需打开浏览器
   process.stderr.write(`请在浏览器打开 ${verificationUrl}\n`);
   process.stderr.write(`授权码: ${userCode}\n`);
-  process.stderr.write(`等待授权中...\n`);
   // SUPSUB_NO_BROWSER 为真值时跳过自动打开浏览器（e2e / 无头环境）
   if (!isTruthyEnv(process.env.SUPSUB_NO_BROWSER)) {
     openBrowser(verificationUrl);
   }
 
-  // 4. 轮询授权状态
+  // 4. 轮询授权状态（用 spinner 避免「等待授权中」期间黑屏）
   const intervalMs = pickInitialIntervalMs(interval);
   const deadline = Date.now() + expiresIn * 1000;
 
-  while (Date.now() < deadline) {
-    await sleep(intervalMs);
+  return withSpinner('等待浏览器授权中…', async () => {
+    while (Date.now() < deadline) {
+      await sleep(intervalMs);
 
-    let result: Awaited<ReturnType<typeof pollDeviceToken>>;
-    try {
-      result = await pollDeviceToken(deviceCode);
-    } catch {
-      // 网络闪断 / 瞬时错误，继续重试
-      continue;
-    }
+      let result: Awaited<ReturnType<typeof pollDeviceToken>>;
+      try {
+        result = await pollDeviceToken(deviceCode);
+      } catch {
+        // 网络闪断 / 瞬时错误，继续重试
+        continue;
+      }
 
-    if (result.status === 'authorized') {
-      if (!result.accessToken || !result.refreshToken) {
+      if (result.status === 'authorized') {
+        if (!result.accessToken || !result.refreshToken) {
+          throw {
+            code: 'SERVER_ERROR',
+            message: '授权成功但未返回令牌，请重试',
+            status: 0,
+          } satisfies ErrorEnvelope;
+        }
+        return {
+          access_token: result.accessToken,
+          refresh_token: result.refreshToken,
+        };
+      }
+
+      if (result.status === 'expired') {
         throw {
-          code: 'SERVER_ERROR',
-          message: '授权成功但未返回令牌，请重试',
+          code: 'EXPIRED_TOKEN',
+          message: '设备码已过期，请重新运行 supsub auth login',
           status: 0,
         } satisfies ErrorEnvelope;
       }
-      return {
-        access_token: result.accessToken,
-        refresh_token: result.refreshToken,
-      };
+
+      // status === 'pending' → 继续轮询
     }
 
-    if (result.status === 'expired') {
-      throw {
-        code: 'EXPIRED_TOKEN',
-        message: '设备码已过期，请重新运行 supsub auth login',
-        status: 0,
-      } satisfies ErrorEnvelope;
-    }
-
-    // status === 'pending' → 继续轮询
-  }
-
-  // 超过有效期仍未授权
-  throw {
-    code: 'EXPIRED_TOKEN',
-    message: '设备码已过期，请重新运行 supsub auth login',
-    status: 0,
-  } satisfies ErrorEnvelope;
+    // 超过有效期仍未授权
+    throw {
+      code: 'EXPIRED_TOKEN',
+      message: '设备码已过期，请重新运行 supsub auth login',
+      status: 0,
+    } satisfies ErrorEnvelope;
+  });
 }

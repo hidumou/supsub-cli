@@ -3,6 +3,7 @@ import { getUserInfo } from '../../src/api/auth.ts';
 import { searchAll } from '../../src/api/search.ts';
 import { listSubs } from '../../src/api/subscription.ts';
 import { setCliApiKey } from '../../src/http/credentials.ts';
+import { e2eApiUrl } from '../_helpers/api-url.ts';
 
 const BEARER_TOKEN = process.env.SUPSUB_E2E_BEARER;
 const SKIP = !BEARER_TOKEN;
@@ -33,8 +34,9 @@ describe.skipIf(SKIP)('e2e/prod-bearer - 测试环境 bearer_token 鉴权', () =
 
     originalApiUrl = process.env.SUPSUB_API_URL;
     originalEnvKey = process.env.SUPSUB_API_KEY;
-    // 强制走测试环境，覆盖本地可能存在的 SUPSUB_API_URL（如 dev mock server）
-    process.env.SUPSUB_API_URL = 'https://supsub-api.ctrlcv.tech';
+    // 统一基址来源：SUPSUB_API_URL > DEFAULT_API_URL（不在仓库写死测试环境地址）。
+    // 跑测试时用 SUPSUB_API_URL 指向目标环境，并提供同环境的 SUPSUB_E2E_BEARER。
+    process.env.SUPSUB_API_URL = e2eApiUrl();
     // 清掉环境里的 api_key，避免抢占优先级
     delete process.env.SUPSUB_API_KEY;
     // 通过 cliApiKey 通道注入 bearer_token，不动 ~/.supsub/config.json

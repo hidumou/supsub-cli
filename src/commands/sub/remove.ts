@@ -2,6 +2,7 @@
 import type { Command } from 'commander';
 import { removeSub } from '../../api/subscription.ts';
 import { output } from '../../ui/output.ts';
+import { withSpinner } from '../../ui/spinner.ts';
 import { printTable } from '../../ui/table.ts';
 import { normalizeType, parseSourceId } from './_args.ts';
 
@@ -17,7 +18,7 @@ export function registerSubRemove(parent: Command): void {
 
       const sourceType = normalizeType(opts.type);
       const sourceId = parseSourceId(opts.sourceId);
-      const data = await removeSub({ sourceType, sourceId });
+      const data = await withSpinner('取消订阅…', () => removeSub({ sourceType, sourceId }));
 
       output({ message: data.message }, fmt, (d) => {
         printTable({

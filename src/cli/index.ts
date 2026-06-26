@@ -17,6 +17,7 @@ import { registerSubContents } from '../commands/sub/contents.ts';
 import { registerSubList } from '../commands/sub/list.ts';
 import { registerSubRemove } from '../commands/sub/remove.ts';
 import { setCliApiKey } from '../http/credentials.ts';
+import { setCliApiUrl } from '../lib/api-url.ts';
 import { dieWith, type ErrorEnvelope, isErrorEnvelope } from '../lib/errors.ts';
 
 function toErrorEnvelope(err: unknown): ErrorEnvelope {
@@ -35,14 +36,16 @@ export async function run(): Promise<void> {
     .name('supsub')
     .description('supsub 命令行工具')
     .version(pkg.version)
-    // 全局选项（API 基地址通过 SUPSUB_API_URL 环境变量配置，不走 flag）
+    // 全局选项
     .option('-o, --output <fmt>', '输出格式：table|json', 'table')
-    .option('--api-key <key>', 'API Key（优先级高于环境变量和配置文件）');
+    .option('--api-key <key>', 'API Key（优先级高于环境变量和配置文件）')
+    .option('--api-url <url>', 'API 基地址（优先级高于 SUPSUB_API_URL 环境变量）');
 
-  // 把全局 --api-key flag 注入到凭证解析器，让 request/api 层无需透传 apiKey
+  // 把全局 --api-key / --api-url flag 注入解析器，让 request/api 层无需逐层透传
   program.hook('preAction', () => {
-    const opts = program.opts() as { apiKey?: string };
+    const opts = program.opts() as { apiKey?: string; apiUrl?: string };
     setCliApiKey(opts.apiKey);
+    setCliApiUrl(opts.apiUrl);
   });
 
   // ─── auth 子命令树 ────────────────────────────────────────

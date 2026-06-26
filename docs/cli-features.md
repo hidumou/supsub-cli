@@ -1,0 +1,147 @@
+# SupSub CLI 终端功能清单
+
+> 本文档罗列 `supsub` 在终端中**当前已实现、可直接使用**的全部功能：命令、参数、行为与终端层面的约定（输出格式、退出码、环境变量）。
+> 仅描述「能用什么」；底层授权时序见 [`cli-auth-flow.md`](./cli-auth-flow.md)。
+
+---
+
+## 全局用法
+
+```
+supsub [全局选项] <命令> [子命令] [参数]
+```
+
+| 全局选项 | 说明 | 默认 |
+|---|---|---|
+| `-o, --output <table\|json>` | 输出格式 | `table` |
+| `--api-key <key>` | 指定 API Key（优先级高于环境变量与配置文件） | 无 |
+| `--api-url <url>` | 指定 API 基地址（优先级高于 `SUPSUB_API_URL` 环境变量） | `https://supsub.net` |
+| `-V, --version` | 打印版本号 | — |
+| `-h, --help` | 打印帮助（每个子命令也支持） | — |
+
+---
+
+## 1. 认证 `auth`
+
+| 命令 | 功能 |
+|---|---|
+| `supsub auth login` | 登录。默认走浏览器 OAuth 设备授权（Device Flow），自动打开浏览器并轮询授权状态；成功后拉取并展示当前用户「昵称 + 邮箱」 |
+| `supsub auth login --api-key <key>` | 用 API Key 直接登录，跳过浏览器授权；同样展示「昵称 + 邮箱」 |
+| `supsub auth status` | 查看当前登录状态：邮箱、昵称、client_id、脱敏密钥、凭证来源、套餐是否过期 |
+| `supsub auth logout` | 登出，清除本地保存的凭证 |
+
+> `auth login` 在无头/CI 环境可设 `SUPSUB_NO_BROWSER=1` 禁止自动打开浏览器。
+> 登录成功后形如 `👤 爱丽丝 <alice@example.com>` 的用户信息走 stderr 输出；`-o json` 模式下 `email` / `name` 一并出现在 stdout 的 `data` 中。
+
+---
+
+## 2. 订阅源 `sub`
+
+### `supsub sub list` — 列出订阅源
+
+| 选项 | 说明 |
+|---|---|
+| `--type <MP\|WEBSITE>` | 按类型过滤（可选） |
+
+输出列：`sourceId`、`类型`、`name`、`description`，末尾显示总条数。
+
+### `supsub sub add` — 添加订阅
+
+`--source-id` 与 `--mp-id` **二选一、互斥**。
+
+| 选项 | 说明 |
+|---|---|
+| `--source-id <id>` | 内部信息源 ID（正整数，来自 `search` / `sub list`）；**必须配合 `--type`** |
+| `--mp-id <mpId>` | 公众号 mpId（base64，来自 `mp search`）；`--type` 可省，默认 `MP` |
+| `--type <MP\|WEBSITE>` | 信息源类型 |
+| `--group <gid>` | 分组 ID，可重复指定以加入多个分组 |
+
+### `supsub sub remove` — 取消订阅
+
+| 选项 | 说明 |
+|---|---|
+| `--source-id <id>` | 必填 |
+| `--type <MP\|WEBSITE>` | 必填 |
+
+### `supsub sub contents` — 查看订阅源内文章
+
+| 选项 | 说明 |
+|---|---|
+| `--source-id <id>` | 必填 |
+| `--type <MP\|WEBSITE>` | 必填 |
+| `--unread` | 仅未读（默认） |
+| `--all` | 全部文章（与 `--unread` 互斥） |
+
+输出列：`publishedAt`（`YYYY-MM-DD HH:mm`）、`read`（已读为 `✓`）、`title`、`articleId`、`url`。
+
+---
+
+## 3. 搜索 `search`
+
+### `supsub search <keyword>` — 全站搜索（源 + 文章）
+
+| 选项 | 说明 | 默认 |
+|---|---|---|
+| `--type <ALL\|MP\|WEBSITE\|CONTENT>` | 搜索范围：全部 / 公众号 / 网站 / 文章正文 | `ALL` |
+
+输出同时包含「源」与「文章」两类结果，每条带类型、ID、名称/标题、域名、摘要。
+
+---
+
+## 4. 公众号 `mp`
+
+| 命令 | 功能 |
+|---|---|
+| `supsub mp search <name>` | 搜索公众号。后台异步任务，CLI 每 2 秒轮询、最长 30 秒，自动累积去重候选结果（含 `mpId` / 名称 / 描述）。`mpId` 可直接用于 `sub add --mp-id` |
+| `supsub mp search-cancel <searchId>` | 取消正在执行的公众号搜索任务 |
+
+---
+
+## 5. 输出格式
+
+- **`table`（默认）**：彩色表格，表头青色加粗；对中文/全角字符按 2 列宽度对齐，避免列错位。
+- **`-o json`**：向 stdout 输出 `{ "success": true, "data": ... }`，可直接 `jq` 处理。出错时输出 `{ "success": false, "error": {...} }`（同样在 stdout）。
+- 成功提示（`✅ 登录成功`、`已登出` 等）走 stderr，因此两种模式下 stdout 都只承载数据。
+- **Loading 动画**：发请求 / 轮询等耗时操作期间会在 stderr 显示一个 spinner（如「加载订阅列表…」「搜索公众号「X」中…」「等待浏览器授权中…」），避免黑屏。仅在交互式终端（TTY）下渲染；管道 / 重定向 / CI / 非 TTY 环境自动静默，绝不污染 stdout（`-o json` 与表格数据始终纯净）。可用 `SUPSUB_NO_SPINNER=1` 强制关闭。
+
+---
+
+## 6. 退出码
+
+| 退出码 | 含义 |
+|---|---|
+| `0` | 成功 |
+| `1` | 一般业务错误 |
+| `2` | 未登录 / 鉴权失败 |
+| `3` | 套餐已过期 |
+| `10` | 网络错误 |
+| `11` | 服务端错误 |
+| `64` | 参数非法 |
+
+可在脚本中据此判断结果，例如配合 `-o json` 做自动化。
+
+---
+
+## 7. 环境变量
+
+| 变量 | 作用 | 默认 |
+|---|---|---|
+| `SUPSUB_API_KEY` | 注入 API Key（等价于 `--api-key`，但 flag 优先级更高） | 无 |
+| `SUPSUB_API_URL` | 覆盖 API 基址（等价于 `--api-url`，但 flag 优先级更高） | `https://supsub.net` |
+| `SUPSUB_NO_BROWSER` | 真值时 `auth login` 不自动打开浏览器 | 未设 |
+| `SUPSUB_NO_SPINNER` | 真值时关闭所有 loading 动画（非 TTY 下本就不渲染） | 未设 |
+| `SUPSUB_CONFIG_DIR` | 覆盖配置目录（凭证存于 `<dir>/config.json`） | `~/.supsub` |
+
+---
+
+## 8. 凭证存储与优先级
+
+凭证保存在 `~/.supsub/config.json`（目录 `0700` / 文件 `0600`）。每次请求按以下优先级取凭证：
+
+1. `--api-key` 命令行参数
+2. `SUPSUB_API_KEY` 环境变量
+3. 配置文件中的设备流令牌 / API Key
+4. 配置文件中手动粘贴的浏览器会话 token
+
+任意请求返回 401 会自动清除本地凭证，需重新 `auth login`。
+</content>

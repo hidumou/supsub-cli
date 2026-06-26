@@ -12,7 +12,7 @@ flowchart LR
     User([用户]):::actor
     CLI["SupSub CLI<br/>(supsub auth login)"]:::cli
     Browser["浏览器<br/>网站 /device 授权页"]:::web
-    API["SupSub 后端 API<br/>(默认 supsub-api.ctrlcv.tech)"]:::api
+    API["SupSub 后端 API<br/>(默认 supsub.net)"]:::api
 
     User -->|运行命令| CLI
     User -->|输入/确认设备码| Browser
@@ -27,7 +27,7 @@ flowchart LR
 
 - **CLI** 负责申请设备码、轮询授权状态、落地令牌。
 - **浏览器 / 网站 `/device` 页** 负责让**已登录用户**确认短码并审批设备（携带网页登录态调用 `device/approve`）。
-- **后端 API** 串联三个端点、签发令牌。CLI 默认基址为测试环境 `https://supsub-api.ctrlcv.tech`，可用 `SUPSUB_API_URL` 覆盖。
+- **后端 API** 串联三个端点、签发令牌。CLI 默认基址为 `https://supsub.net`，可用 `--api-url` flag 或 `SUPSUB_API_URL` 环境变量覆盖（flag 优先级更高）。
 
 ---
 
@@ -151,7 +151,7 @@ flowchart LR
 
 | 变量 | 作用 | 默认 |
 |---|---|---|
-| `SUPSUB_API_URL` | 覆盖 API 基址 | `https://supsub-api.ctrlcv.tech`（测试环境） |
+| `SUPSUB_API_URL` | 覆盖 API 基址（等价于 `--api-url` flag，但 flag 优先级更高） | `https://supsub.net` |
 | `SUPSUB_API_KEY` | 注入 Bearer（source=env） | 无 |
 | `SUPSUB_NO_BROWSER` | 真值时 `auth login` 不自动打开浏览器（e2e / 无头环境） | 未设 |
 | `SUPSUB_CONFIG_DIR` | 覆盖配置目录（测试隔离用） | `~/.supsub` |

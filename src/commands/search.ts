@@ -4,6 +4,7 @@ import { searchAll } from '../api/search.ts';
 import type { ErrorEnvelope } from '../lib/errors.ts';
 import type { SearchResultItem, SourceBasic } from '../lib/types.ts';
 import { output } from '../ui/output.ts';
+import { withSpinner } from '../ui/spinner.ts';
 import { printTable, truncate } from '../ui/table.ts';
 
 const VALID_TYPES = new Set(['ALL', 'MP', 'WEBSITE', 'CONTENT']);
@@ -68,10 +69,12 @@ export function registerSearch(program: Command): void {
         } satisfies ErrorEnvelope;
       }
 
-      const data = await searchAll({
-        type: typeVal as 'ALL' | 'MP' | 'WEBSITE' | 'CONTENT',
-        keywords: keyword,
-      });
+      const data = await withSpinner(`搜索「${keyword}」中…`, () =>
+        searchAll({
+          type: typeVal as 'ALL' | 'MP' | 'WEBSITE' | 'CONTENT',
+          keywords: keyword,
+        }),
+      );
 
       output(data, fmt, (d) => {
         const results = d.results ?? [];

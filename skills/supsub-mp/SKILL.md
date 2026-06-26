@@ -80,7 +80,7 @@ JSON shape: `{"success":true,"data":{"message":"已取消"}}`
   supsub sub add --mp-id "$mpId"
   ```
 - ⚠️ **不要把 `mpId` 当成 `--source-id`**：`mp search` 返回的 `mpId` 是微信原生 base64 字符串（如 `MzkyNTYzODk0NQ==`），`supsub sub add --source-id` 期望的是 supsub 内部正整数 sourceId（来自 `supsub search` / `sub list`），两者属于不同 ID 空间。哪怕 base64 解码出来是数字，后端也会以"信息源不存在"驳回。统一走 `--mp-id`。
-- 部分 `mp search` 结果会带 `isSubscribed: true`，表示这个号已经在你账号下订阅过；遇到这类条目无需再 `sub add`。
+- `mp search` 每个候选只含 `mpId` / `name` / `img` / `description` 四个字段（见 `src/lib/types.ts` 的 `MpSearchTaskResult.mp`），**不返回** `isSubscribed`；要判断是否已订阅，改用 `supsub search ... --type MP` 结果里的 `data.isSubscribed`，或先 `supsub sub list` 比对。
 - `mp search` 内部固定轮询：间隔 2s，总时长 30s（`POLL_INTERVAL_MS` / `POLL_MAX_MS`），CLI 不暴露调参 flag。
 - 后端按"流式"返回候选公众号：CLI 已经做去重（按 `mpId`），调用方不用再去重。
 - 超时分支的合法后续动作只有：`supsub mp search-cancel <searchId>` 取消孤儿任务，或重新发起 `supsub mp search <name>`。

@@ -142,6 +142,7 @@ supsub mp search-cancel <searchId>  取消正在执行的搜索任务
 | 参数 | 说明 |
 |------|------|
 | `--api-key <key>` | 指定 API Key |
+| `--api-url <url>` | 指定 API 基地址，默认 `https://supsub.net` |
 | `-o, --output table\|json` | 输出格式，默认 `table` |
 
 ## 环境变量
@@ -149,6 +150,7 @@ supsub mp search-cancel <searchId>  取消正在执行的搜索任务
 | 变量 | 说明 |
 |------|------|
 | `SUPSUB_API_KEY` | API Key（同 `--api-key`，命令行 flag 优先级更高） |
+| `SUPSUB_API_URL` | API 基地址（同 `--api-url`，命令行 flag 优先级更高） |
 ---
 
 ## Skills（AI agent 集成）

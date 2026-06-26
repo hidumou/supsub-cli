@@ -17,8 +17,9 @@ type CliResult = { stdout: string; stderr: string; code: number };
  * 关键点：
  *   - HOME 指到一个空临时目录，强制 readConfig 拿空对象，
  *     避免本机现有 ~/.supsub/config.json 抢 source=config 优先级
- *   - 不强制覆盖 SUPSUB_API_URL：默认基址即测试环境
- *     https://supsub-api.ctrlcv.tech（DEFAULT_API_URL）
+ *   - 不强制覆盖 SUPSUB_API_URL：基址由 CLI 子进程自行解析
+ *     （SUPSUB_API_URL > DEFAULT_API_URL）。跑测试时用 SUPSUB_API_URL
+ *     指向目标环境，并提供同环境的 SUPSUB_E2E_BEARER。
  *   - exitOverride 不可用（真实子进程），靠 exit code 判断业务结果
  */
 async function runCli(
