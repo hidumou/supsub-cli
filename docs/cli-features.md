@@ -97,7 +97,26 @@ supsub [全局选项] <命令> [子命令] [参数]
 
 ---
 
-## 5. 输出格式
+## 5. 自更新 `update`
+
+| 命令 | 功能 |
+|---|---|
+| `supsub update` | 检查并更新到最新版本：查 npm registry 最新版 → 从 GitHub Release 下载对应平台预编译 binary → 原地替换正在运行的可执行文件 |
+| `supsub update --check` | 只检查是否有新版本，输出 `current` / `latest` / `hasUpdate`，不实际更新 |
+| `supsub update --force` | 即使已是最新也重新下载安装（修复损坏的 binary） |
+
+机制说明：
+
+- 替换采用「同目录暂存 + 原子 `rename`」覆盖自身，Unix 下可覆盖正在运行的可执行文件，更新后下次运行即新版本。
+- 下载资产命名与 `scripts/postinstall.cjs` 完全一致（同一套 GitHub Release 包），二者是两条等价的更新路径。
+- 若全局安装目录无写权限（如装在需 sudo 的路径），会以退出码 `1` 报错并提示改用 `npm i -g @supsub/cli@latest` 或加 `sudo` 重试。
+- 不读取/不发送任何凭证，访问的是 `registry.npmjs.org` 与 `github.com`，与 supsub API 鉴权无关。
+
+> 除 `supsub update` 外，也可随时用包管理器手动更新：`npm i -g @supsub/cli@latest`（会触发 postinstall 重新下载 binary）。CLI 本身不做后台自动更新，也不在启动时检查新版本。
+
+---
+
+## 6. 输出格式
 
 - **`table`（默认）**：彩色表格，表头青色加粗；对中文/全角字符按 2 列宽度对齐，避免列错位。
 - **`-o json`**：向 stdout 输出 `{ "success": true, "data": ... }`，可直接 `jq` 处理。出错时输出 `{ "success": false, "error": {...} }`（同样在 stdout）。
@@ -106,7 +125,7 @@ supsub [全局选项] <命令> [子命令] [参数]
 
 ---
 
-## 6. 退出码
+## 7. 退出码
 
 | 退出码 | 含义 |
 |---|---|
@@ -122,7 +141,7 @@ supsub [全局选项] <命令> [子命令] [参数]
 
 ---
 
-## 7. 环境变量
+## 8. 环境变量
 
 | 变量 | 作用 | 默认 |
 |---|---|---|
@@ -134,7 +153,7 @@ supsub [全局选项] <命令> [子命令] [参数]
 
 ---
 
-## 8. 凭证存储与优先级
+## 9. 凭证存储与优先级
 
 凭证保存在 `~/.supsub/config.json`（目录 `0700` / 文件 `0600`）。每次请求按以下优先级取凭证：
 
@@ -144,4 +163,3 @@ supsub [全局选项] <命令> [子命令] [参数]
 4. 配置文件中手动粘贴的浏览器会话 token
 
 任意请求返回 401 会自动清除本地凭证，需重新 `auth login`。
-</content>

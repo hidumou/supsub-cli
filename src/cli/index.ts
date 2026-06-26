@@ -16,6 +16,8 @@ import { registerSubContents } from '../commands/sub/contents.ts';
 // Sub commands
 import { registerSubList } from '../commands/sub/list.ts';
 import { registerSubRemove } from '../commands/sub/remove.ts';
+// Self-update command
+import { registerUpdate } from '../commands/update.ts';
 import { setCliApiKey } from '../http/credentials.ts';
 import { setCliApiUrl } from '../lib/api-url.ts';
 import { dieWith, type ErrorEnvelope, isErrorEnvelope } from '../lib/errors.ts';
@@ -68,6 +70,9 @@ export async function run(): Promise<void> {
   const mp = program.command('mp').description('公众号相关操作');
   registerMpSearch(mp);
   registerMpSearchCancel(mp);
+
+  // ─── update 命令（自更新） ────────────────────────────────
+  registerUpdate(program);
 
   // 顶层 try/catch：捕获所有命令抛出的错误并统一处理（exit code 由 errors.ts 推导）
   try {
